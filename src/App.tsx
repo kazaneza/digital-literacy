@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LandingPage from './components/LandingPage';
-import AssessmentPage from './components/AssessmentPage';
+import AssessmentFlow from './components/AssessmentFlow';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<'landing' | 'assessment'>('landing');
@@ -38,7 +38,7 @@ function App() {
       {currentPage === 'landing' ? (
         <LandingPage onStartAssessment={handleStartAssessment} />
       ) : (
-        <AssessmentPage onBackToLanding={handleBackToLanding} />
+        <AssessmentFlow onBackToLanding={handleBackToLanding} />
       )}
     </>
   );
