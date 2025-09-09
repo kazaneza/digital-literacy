@@ -3,12 +3,15 @@ from .assessment import (
     PromptRequest,
     WritingRequest,
     TaskManagementRequest,
+    DataAnalysisRequest,
     EvaluationCriteria,
     WritingCriteria,
     TaskManagementCriteria,
+    DataAnalysisCriteria,
     EvaluationResponse,
     WritingEvaluationResponse,
     TaskManagementEvaluationResponse,
+    DataAnalysisEvaluationResponse,
     AssessmentQuestion
 )
 
@@ -17,11 +20,14 @@ __all__ = [
     "PromptRequest", 
     "WritingRequest",
     "TaskManagementRequest",
+    "DataAnalysisRequest",
     "EvaluationCriteria",
     "WritingCriteria",
     "TaskManagementCriteria",
+    "DataAnalysisCriteria",
     "EvaluationResponse",
     "WritingEvaluationResponse",
     "TaskManagementEvaluationResponse",
+    "DataAnalysisEvaluationResponse",
     "AssessmentQuestion"
 ]

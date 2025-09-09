@@ -3,6 +3,7 @@ import { ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 import PromptEngineeringStep from './steps/PromptEngineeringStep';
 import WritingAssessmentStep from './steps/WritingAssessmentStep';
 import TaskManagementStep from './steps/TaskManagementStep';
+import DataAnalysisStep from './steps/DataAnalysisStep';
 import ResultsStep from './steps/ResultsStep';
 
 export interface AssessmentResults {
@@ -29,6 +30,16 @@ export interface AssessmentResults {
     suggestions: string[];
     efficiency_rating: string;
   };
+  dataAnalysis?: {
+    score: number;
+    grade: string;
+    isGoodAnalysis: boolean;
+    feedback: string;
+    criteria: any;
+    suggestions: string[];
+    insight_quality: string;
+    recommended_tools: string[];
+  };
 }
 
 interface AssessmentFlowProps {
@@ -44,7 +55,8 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
     { id: 1, title: 'Prompt Engineering', description: 'Test your AI prompting skills' },
     { id: 2, title: 'Writing & Document Automation', description: 'Create professional documents with AI' },
     { id: 3, title: 'Task Management & Workflow', description: 'Optimize processes with AI tools' },
-    { id: 4, title: 'Results', description: 'View your assessment results' }
+    { id: 4, title: 'Data Analysis & Visualization', description: 'AI-powered data insights and visualization' },
+    { id: 5, title: 'Results', description: 'View your assessment results' }
   ];
 
   const handleStepComplete = (stepId: number, stepResults: any) => {
@@ -56,6 +68,8 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
       setResults(prev => ({ ...prev, writingAssessment: stepResults }));
     } else if (stepId === 3) {
       setResults(prev => ({ ...prev, taskManagement: stepResults }));
+    } else if (stepId === 4) {
+      setResults(prev => ({ ...prev, dataAnalysis: stepResults }));
     }
   };
 
@@ -99,6 +113,13 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
           />
         );
       case 4:
+        return (
+          <DataAnalysisStep
+            onComplete={(results) => handleStepComplete(4, results)}
+            isCompleted={completedSteps.has(4)}
+          />
+        );
+      case 5:
         return (
           <ResultsStep
             results={results}
@@ -157,7 +178,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
         </div>
 
         {/* Navigation */}
-        {currentStep < 4 && (
+        {currentStep < 5 && (
           <div className="flex justify-between items-center">
             <button
               onClick={handlePrevious}

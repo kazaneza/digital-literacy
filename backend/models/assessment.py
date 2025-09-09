@@ -20,6 +20,13 @@ class TaskManagementRequest(BaseModel):
     scenario_type: str  # project_planning, priority_matrix, workflow_optimization, etc.
     user_response: str
     scenario_data: str
+
+class DataAnalysisRequest(BaseModel):
+    analysis_type: str  # sales_analysis, customer_insights, financial_reporting, etc.
+    user_approach: str
+    dataset_context: str
+    visualization_requirements: List[str]
+
 class EvaluationCriteria(BaseModel):
     clarity: int
     specificity: int
@@ -37,6 +44,14 @@ class TaskManagementCriteria(BaseModel):
     prioritization: int
     ai_integration: int
     efficiency: int
+
+class DataAnalysisCriteria(BaseModel):
+    data_understanding: int
+    analytical_approach: int
+    ai_tool_usage: int
+    visualization_quality: int
+    insights_generation: int
+
 class EvaluationResponse(BaseModel):
     isGoodPrompt: bool
     score: int
@@ -60,6 +75,17 @@ class TaskManagementEvaluationResponse(BaseModel):
     suggestions: List[str]
     grade: str  # A, B, C, D, F
     efficiency_rating: str  # Excellent, Good, Fair, Needs Improvement
+
+class DataAnalysisEvaluationResponse(BaseModel):
+    isGoodAnalysis: bool
+    score: int
+    criteria: DataAnalysisCriteria
+    feedback: str
+    suggestions: List[str]
+    grade: str  # A, B, C, D, F
+    insight_quality: str  # Excellent, Good, Fair, Needs Improvement
+    recommended_tools: List[str]
+
 class AssessmentQuestion(BaseModel):
     id: str
     type: AssessmentType
