@@ -13,6 +13,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     if (results.promptEngineering?.score) scores.push(results.promptEngineering.score);
     if (results.writingAssessment?.score) scores.push(results.writingAssessment.score);
     if (results.taskManagement?.score) scores.push(results.taskManagement.score);
+    if (results.dataAnalysis?.score) scores.push(results.dataAnalysis.score);
     
     if (scores.length === 0) return 0;
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
@@ -58,7 +59,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
       </div>
 
       {/* Individual Results */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Prompt Engineering Results */}
         {results.promptEngineering && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -92,6 +93,57 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
               <div className="pt-3 border-t border-gray-200">
                 <p className="text-sm text-gray-600 leading-relaxed">
                   {results.promptEngineering.feedback}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Writing Assessment Results */}
+        {results.writingAssessment && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <span className="text-purple-600 font-bold">2</span>
+              </div>
+              <span>Writing & Document Automation</span>
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Grade:</span>
+                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
+                  results.writingAssessment.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
+                  results.writingAssessment.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
+                  results.writingAssessment.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
+                  'text-red-600 bg-red-100 border-red-300'
+                }`}>
+                  {results.writingAssessment.grade}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Score:</span>
+                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.writingAssessment.score)}`}>
+                  {results.writingAssessment.score}%
+                </span>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
+                {Object.entries(results.writingAssessment.criteria).map(([criterion, score]) => (
+                  <div key={criterion} className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                      {score}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="pt-3 border-t border-gray-200">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {results.writingAssessment.feedback}
                 </p>
               </div>
             </div>
@@ -160,39 +212,52 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
             </div>
           </div>
         )}
-        {/* Writing Assessment Results */}
-        {results.writingAssessment && (
+
+        {/* Data Analysis Results */}
+        {results.dataAnalysis && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 font-bold">2</span>
+              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <span className="text-indigo-600 font-bold">4</span>
               </div>
-              <span>Writing & Document Automation</span>
+              <span>Data Analysis & Visualization</span>
             </h3>
             
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Grade:</span>
                 <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.writingAssessment.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.writingAssessment.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.writingAssessment.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
+                  results.dataAnalysis.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
+                  results.dataAnalysis.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
+                  results.dataAnalysis.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
                   'text-red-600 bg-red-100 border-red-300'
                 }`}>
-                  {results.writingAssessment.grade}
+                  {results.dataAnalysis.grade}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Insight Quality:</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  results.dataAnalysis.insight_quality === 'Excellent' ? 'text-green-600 bg-green-100' :
+                  results.dataAnalysis.insight_quality === 'Good' ? 'text-blue-600 bg-blue-100' :
+                  results.dataAnalysis.insight_quality === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
+                  'text-red-600 bg-red-100'
+                }`}>
+                  {results.dataAnalysis.insight_quality}
                 </span>
               </div>
               
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Score:</span>
-                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.writingAssessment.score)}`}>
-                  {results.writingAssessment.score}%
+                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.dataAnalysis.score)}`}>
+                  {results.dataAnalysis.score}%
                 </span>
               </div>
               
               <div className="space-y-2">
                 <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.writingAssessment.criteria).map(([criterion, score]) => (
+                {Object.entries(results.dataAnalysis.criteria).map(([criterion, score]) => (
                   <div key={criterion} className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
                     <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
@@ -202,9 +267,20 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
                 ))}
               </div>
               
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Recommended Tools:</span>
+                <div className="flex flex-wrap gap-1">
+                  {results.dataAnalysis.recommended_tools.slice(0, 3).map((tool, index) => (
+                    <span key={index} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
               <div className="pt-3 border-t border-gray-200">
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.writingAssessment.feedback}
+                  {results.dataAnalysis.feedback}
                 </p>
               </div>
             </div>
