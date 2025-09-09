@@ -2,5 +2,7 @@ from services.prompt_evaluator import PromptEvaluatorService
 from services.writing_evaluator import WritingEvaluatorService
 from services.task_management_evaluator import TaskManagementEvaluatorService
 from services.data_analysis_evaluator import DataAnalysisEvaluatorService
+from services.presentation_evaluator import PresentationEvaluatorService
+from services.productivity_evaluator import ProductivityEvaluatorService
 
-__all__ = ["PromptEvaluatorService", "WritingEvaluatorService", "TaskManagementEvaluatorService", "DataAnalysisEvaluatorService"]
+__all__ = ["PromptEvaluatorService", "WritingEvaluatorService", "TaskManagementEvaluatorService", "DataAnalysisEvaluatorService", "PresentationEvaluatorService", "ProductivityEvaluatorService"]

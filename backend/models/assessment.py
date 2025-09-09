@@ -6,6 +6,9 @@ class AssessmentType(str, Enum):
     PROMPT_ENGINEERING = "prompt_engineering"
     WRITING_AUTOMATION = "writing_automation"
     TASK_MANAGEMENT = "task_management"
+    DATA_ANALYSIS = "data_analysis"
+    AI_PRESENTATIONS = "ai_presentations"
+    WORKFLOW_AUTOMATION = "workflow_automation"
 
 class PromptRequest(BaseModel):
     prompt: str
@@ -27,6 +30,17 @@ class DataAnalysisRequest(BaseModel):
     dataset_context: str
     visualization_requirements: List[str]
 
+class PresentationRequest(BaseModel):
+    presentation_type: str  # executive_briefing, training_session, project_proposal, etc.
+    content_approach: str
+    audience_context: str
+    presentation_requirements: List[str]
+
+class ProductivityRequest(BaseModel):
+    automation_type: str  # email_automation, report_generation, meeting_scheduling, etc.
+    workflow_description: str
+    current_process: str
+    automation_goals: List[str]
 class EvaluationCriteria(BaseModel):
     clarity: int
     specificity: int
@@ -52,6 +66,19 @@ class DataAnalysisCriteria(BaseModel):
     visualization_quality: int
     insights_generation: int
 
+class PresentationCriteria(BaseModel):
+    content_structure: int
+    visual_design: int
+    ai_integration: int
+    audience_engagement: int
+    storytelling: int
+
+class ProductivityCriteria(BaseModel):
+    process_analysis: int
+    automation_strategy: int
+    ai_tool_selection: int
+    efficiency_improvement: int
+    implementation_feasibility: int
 class EvaluationResponse(BaseModel):
     isGoodPrompt: bool
     score: int
@@ -86,6 +113,26 @@ class DataAnalysisEvaluationResponse(BaseModel):
     insight_quality: str  # Excellent, Good, Fair, Needs Improvement
     recommended_tools: List[str]
 
+class PresentationEvaluationResponse(BaseModel):
+    isGoodPresentation: bool
+    score: int
+    criteria: PresentationCriteria
+    feedback: str
+    suggestions: List[str]
+    grade: str  # A, B, C, D, F
+    engagement_level: str  # Excellent, Good, Fair, Needs Improvement
+    recommended_tools: List[str]
+
+class ProductivityEvaluationResponse(BaseModel):
+    isGoodAutomation: bool
+    score: int
+    criteria: ProductivityCriteria
+    feedback: str
+    suggestions: List[str]
+    grade: str  # A, B, C, D, F
+    efficiency_gain: str  # High, Medium, Low, Minimal
+    recommended_tools: List[str]
+    implementation_timeline: str
 class AssessmentQuestion(BaseModel):
     id: str
     type: AssessmentType
