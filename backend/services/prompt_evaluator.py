@@ -1,7 +1,7 @@
 import openai
 import json
 from typing import Dict, Any
-from ..models.assessment import PromptRequest, EvaluationResponse, EvaluationCriteria
+from models.assessment import PromptRequest, EvaluationResponse, EvaluationCriteria
 
 class PromptEvaluatorService:
     def __init__(self):

@@ -1,7 +1,7 @@
 import openai
 import json
 from typing import List
-from ..models.assessment import WritingRequest, WritingEvaluationResponse, WritingCriteria
+from models.assessment import WritingRequest, WritingEvaluationResponse, WritingCriteria
 
 class WritingEvaluatorService:
     def __init__(self):

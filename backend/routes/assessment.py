@@ -1,13 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from ..models.assessment import (
+from models.assessment import (
     PromptRequest, 
     WritingRequest,
     EvaluationResponse, 
     WritingEvaluationResponse,
     AssessmentType
 )
-from ..services.prompt_evaluator import PromptEvaluatorService
-from ..services.writing_evaluator import WritingEvaluatorService
+from services.prompt_evaluator import PromptEvaluatorService
+from services.writing_evaluator import WritingEvaluatorService
 import json
 
 router = APIRouter(prefix="/assessment", tags=["assessment"])
