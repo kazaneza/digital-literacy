@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import openai
 import os
 from dotenv import load_dotenv
-from .routes.assessment import router as assessment_router
+from routes.assessment import router as assessment_router
 
 # Load environment variables
 load_dotenv()
