@@ -12,6 +12,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     const scores = [];
     if (results.promptEngineering?.score) scores.push(results.promptEngineering.score);
     if (results.writingAssessment?.score) scores.push(results.writingAssessment.score);
+    if (results.taskManagement?.score) scores.push(results.taskManagement.score);
     
     if (scores.length === 0) return 0;
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
@@ -57,7 +58,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
       </div>
 
       {/* Individual Results */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         {/* Prompt Engineering Results */}
         {results.promptEngineering && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -97,6 +98,68 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           </div>
         )}
 
+        {/* Task Management Results */}
+        {results.taskManagement && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                <span className="text-orange-600 font-bold">3</span>
+              </div>
+              <span>Task Management & Workflow</span>
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Grade:</span>
+                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
+                  results.taskManagement.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
+                  results.taskManagement.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
+                  results.taskManagement.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
+                  'text-red-600 bg-red-100 border-red-300'
+                }`}>
+                  {results.taskManagement.grade}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Efficiency:</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  results.taskManagement.efficiency_rating === 'Excellent' ? 'text-green-600 bg-green-100' :
+                  results.taskManagement.efficiency_rating === 'Good' ? 'text-blue-600 bg-blue-100' :
+                  results.taskManagement.efficiency_rating === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
+                  'text-red-600 bg-red-100'
+                }`}>
+                  {results.taskManagement.efficiency_rating}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Score:</span>
+                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.taskManagement.score)}`}>
+                  {results.taskManagement.score}%
+                </span>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
+                {Object.entries(results.taskManagement.criteria).map(([criterion, score]) => (
+                  <div key={criterion} className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                      {score}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="pt-3 border-t border-gray-200">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {results.taskManagement.feedback}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Writing Assessment Results */}
         {results.writingAssessment && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">

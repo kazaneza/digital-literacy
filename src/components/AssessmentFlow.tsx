@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react';
 import PromptEngineeringStep from './steps/PromptEngineeringStep';
 import WritingAssessmentStep from './steps/WritingAssessmentStep';
+import TaskManagementStep from './steps/TaskManagementStep';
 import ResultsStep from './steps/ResultsStep';
 
 export interface AssessmentResults {
@@ -19,6 +20,15 @@ export interface AssessmentResults {
     criteria: any;
     suggestions: string[];
   };
+  taskManagement?: {
+    score: number;
+    grade: string;
+    isGoodApproach: boolean;
+    feedback: string;
+    criteria: any;
+    suggestions: string[];
+    efficiency_rating: string;
+  };
 }
 
 interface AssessmentFlowProps {
@@ -33,7 +43,8 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
   const steps = [
     { id: 1, title: 'Prompt Engineering', description: 'Test your AI prompting skills' },
     { id: 2, title: 'Writing & Document Automation', description: 'Create professional documents with AI' },
-    { id: 3, title: 'Results', description: 'View your assessment results' }
+    { id: 3, title: 'Task Management & Workflow', description: 'Optimize processes with AI tools' },
+    { id: 4, title: 'Results', description: 'View your assessment results' }
   ];
 
   const handleStepComplete = (stepId: number, stepResults: any) => {
@@ -43,6 +54,8 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
       setResults(prev => ({ ...prev, promptEngineering: stepResults }));
     } else if (stepId === 2) {
       setResults(prev => ({ ...prev, writingAssessment: stepResults }));
+    } else if (stepId === 3) {
+      setResults(prev => ({ ...prev, taskManagement: stepResults }));
     }
   };
 
@@ -79,6 +92,13 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
           />
         );
       case 3:
+        return (
+          <TaskManagementStep
+            onComplete={(results) => handleStepComplete(3, results)}
+            isCompleted={completedSteps.has(3)}
+          />
+        );
+      case 4:
         return (
           <ResultsStep
             results={results}
@@ -137,7 +157,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
         </div>
 
         {/* Navigation */}
-        {currentStep < 3 && (
+        {currentStep < 4 && (
           <div className="flex justify-between items-center">
             <button
               onClick={handlePrevious}
