@@ -2,6 +2,7 @@ import React from 'react';
 import BKLogo from './BKLogo';
 import DataTable from './DataTable';
 import PromptEvaluator from './PromptEvaluator';
+import WritingAssessment from './WritingAssessment';
 import { BookOpen, ArrowLeft } from 'lucide-react';
 
 interface AssessmentPageProps {
@@ -9,6 +10,8 @@ interface AssessmentPageProps {
 }
 
 const AssessmentPage: React.FC<AssessmentPageProps> = ({ onBackToLanding }) => {
+  const [currentAssessment, setCurrentAssessment] = React.useState<'prompt' | 'writing'>('prompt');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
       {/* Header */}
@@ -33,24 +36,55 @@ const AssessmentPage: React.FC<AssessmentPageProps> = ({ onBackToLanding }) => {
             <BookOpen className="w-8 h-8 text-blue-600" />
             <h2 className="text-3xl font-bold text-gray-900">AI Literacy Assessment</h2>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Test your ability to create effective AI prompts by analyzing the data below and crafting a prompt to answer the question.
-          </p>
+          
+          {/* Assessment Type Selector */}
+          <div className="flex justify-center space-x-4 mb-6">
+            <button
+              onClick={() => setCurrentAssessment('prompt')}
+              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                currentAssessment === 'prompt'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Prompt Engineering
+            </button>
+            <button
+              onClick={() => setCurrentAssessment('writing')}
+              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+                currentAssessment === 'writing'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Writing & Document Automation
+            </button>
+          </div>
         </div>
 
-        {/* Main Content */}
-        <div className="space-y-8">
-          {/* Data Table */}
-          <div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Employee Database</h3>
-            <DataTable />
-          </div>
+        {/* Assessment Content */}
+        {currentAssessment === 'prompt' ? (
+          <div className="space-y-8">
+            <div className="text-center mb-6">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Test your ability to create effective AI prompts by analyzing the data below and crafting a prompt to answer the question.
+              </p>
+            </div>
+            
+            {/* Data Table */}
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Employee Database</h3>
+              <DataTable />
+            </div>
 
-          {/* Prompt Evaluator */}
-          <div>
-            <PromptEvaluator />
+            {/* Prompt Evaluator */}
+            <div>
+              <PromptEvaluator />
+            </div>
           </div>
-        </div>
+        ) : (
+          <WritingAssessment />
+        )}
       </div>
       
       {/* Footer */}
