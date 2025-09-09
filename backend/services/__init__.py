@@ -1,4 +1,4 @@
-from prompt_evaluator import PromptEvaluatorService
-from writing_evaluator import WritingEvaluatorService
+from services.prompt_evaluator import PromptEvaluatorService
+from services.writing_evaluator import WritingEvaluatorService
 
 __all__ = ["PromptEvaluatorService", "WritingEvaluatorService"]
