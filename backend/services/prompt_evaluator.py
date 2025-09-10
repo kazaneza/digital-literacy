@@ -116,26 +116,51 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         Generated answer from user's prompt:
         {generated_answer}
         
+        CRITICAL EVALUATION RULES:
+        1. DETECT QUESTION COPYING: If the user's prompt is just copying/rephrasing the original question without proper AI prompt structure, score very low (under 30%).
+        2. PROPER AI PROMPT STRUCTURE: A good prompt should be written AS IF talking to an AI assistant, using clear instructions like "Analyze this data...", "Please examine...", "Based on the table..."
+        3. PROMPT vs QUESTION: The user should create an AI PROMPT (instructions to AI), NOT just restate the question.
+        4. SPECIFICITY TEST: The prompt should specify HOW to analyze the data, not just WHAT to find.
+        
+        EXAMPLES OF BAD PROMPTS (should score low):
+        - Just copying the question word-for-word
+        - "Analyze the employee database and provide a comprehensive report that includes: 1. For each department..." (this is just the question)
+        - Restating requirements without AI instruction structure
+        
+        EXAMPLES OF GOOD PROMPTS (should score high):
+        - "Please analyze the employee data table systematically. First, examine each department to find the highest-paid employee and identify their manager using the Manager_ID field..."
+        - "Based on the employee database provided, I need you to perform a multi-step analysis. Start by filtering employees with performance ratings above 4.0..."
+        - "Using the employee data, please create a comprehensive report by following these analytical steps..."
         EVALUATION CRITERIA (score each out of 100):
-        1. Clarity: Is the prompt clear and easy to understand?
-        2. Specificity: Does it specify exactly what data is needed?
-        3. Completeness: Does it ask for all necessary information to answer the question?
-        4. Relevance: Is the prompt relevant to answering the question about districts and names?
+        1. Clarity: Is the prompt clear and written as proper AI instructions (not just copying the question)?
+        2. Specificity: Does it specify exactly what data analysis steps to take and how to process the data?
+        3. Completeness: Does it provide complete instructions for all required analysis parts?
+        4. Relevance: Is it structured as a proper AI prompt rather than just restating the question?
         
-        CRITICAL: The user's prompt must generate an answer that matches the expected format. 
-        The question asks for "full names of people under each district" - the answer must include:
-        - District names as headers/categories
-        - Full names (first + last name) of people listed under each district
-        - All people from the data table properly categorized
+        CRITICAL EVALUATION POINTS:
+        1. If the user just copied/rephrased the question, score all criteria under 30%
+        2. The prompt must be written AS INSTRUCTIONS TO AN AI, not as a question restatement
+        3. Good prompts use phrases like "Please analyze...", "Based on the data...", "I need you to..."
+        4. The prompt should show understanding of how to structure AI instructions
+        5. Must demonstrate actual prompt engineering skills, not just comprehension
         
-        If the generated answer does NOT include the full names of people organized by district, 
-        the scores should be significantly lower (especially completeness and relevance).
+        SCORING GUIDELINES:
+        - Question copying/rephrasing: 0-30% on all criteria
+        - Poor AI instruction structure: 30-50%
+        - Good AI prompt structure but incomplete: 50-75%
+        - Excellent AI prompt with proper structure: 75-100%
         
-        Compare the generated answer with the expected answer:
-        Expected: Lists districts with full names of people under each
+        Compare the user's prompt structure:
+        User Prompt: "{request.prompt}"
+        Original Question: "{self.assessment_question}"
         Generated: {generated_answer}
+        Expected Answer Format: {self.correct_answer}
         
-        Score harshly if the generated answer doesn't serve the actual purpose of the question.
+        Score harshly if:
+        - User just copied the question
+        - Prompt doesn't sound like instructions to an AI
+        - Generated answer doesn't match expected comprehensive analysis
+        - Shows no understanding of prompt engineering principles
         
         Please respond in this exact JSON format:
         {{

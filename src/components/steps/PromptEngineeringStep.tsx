@@ -108,6 +108,12 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
             <strong>Challenge Level:</strong> This requires advanced prompt engineering skills including data relationships, conditional logic, grouping, calculations, and multi-step analysis.
           </p>
         </div>
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
+          <p className="text-sm text-red-800">
+            <strong>⚠️ Important:</strong> Write a proper AI prompt (instructions to an AI assistant), not just a copy of the question above. 
+            Good prompts start with phrases like "Please analyze...", "Based on the data...", "I need you to examine..."
+          </p>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -124,7 +130,7 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Write your prompt here to answer the question above..."
+            placeholder="Write your AI prompt here (e.g., 'Please analyze the employee database systematically. First, examine each department to identify...'). Remember: write instructions TO an AI, not just a restatement of the question."
             className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           />
           <div className="flex justify-end">
