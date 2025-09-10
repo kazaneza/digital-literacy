@@ -2,10 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-from routes.assessment import router as assessment_router
 
 # Load environment variables
 load_dotenv()
+
+# Import routes after loading environment variables
+from routes.assessment import router as assessment_router
 
 app = FastAPI(title="AI Literacy Assessment API", version="2.0.0")
 

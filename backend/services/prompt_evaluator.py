@@ -1,13 +1,20 @@
 import openai
 import json
 import os
+from dotenv import load_dotenv
 from typing import Dict, Any
 from models.assessment import PromptRequest, EvaluationResponse, EvaluationCriteria
 
+# Load environment variables
+load_dotenv()
+
 class PromptEvaluatorService:
     def __init__(self):
-        # Initialize OpenAI client properly
-        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        # Initialize OpenAI client properly with error handling
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        self.client = openai.OpenAI(api_key=api_key)
         
         self.sample_data = """
 ID | First Name | Last Name | District | Occupation
