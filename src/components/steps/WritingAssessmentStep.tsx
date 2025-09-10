@@ -220,7 +220,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.familiarity}
                       onChange={(e) => updateToolUsage(tool.id, 'familiarity', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
+                      className={`w-full h-3 rounded-lg appearance-none cursor-pointer slider ${getSliderTrackColor(usage.familiarity)}`}
                       style={{
                         background: `linear-gradient(to right, ${getSliderColor(usage.familiarity)} 0%, ${getSliderColor(usage.familiarity)} ${usage.familiarity}%, #e5e7eb ${usage.familiarity}%, #e5e7eb 100%)`
                       }}
@@ -244,7 +244,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.frequency}
                       onChange={(e) => updateToolUsage(tool.id, 'frequency', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
+                      className={`w-full h-3 rounded-lg appearance-none cursor-pointer slider ${getSliderTrackColor(usage.frequency)}`}
                       style={{
                         background: `linear-gradient(to right, ${getSliderColor(usage.frequency)} 0%, ${getSliderColor(usage.frequency)} ${usage.frequency}%, #e5e7eb ${usage.frequency}%, #e5e7eb 100%)`
                       }}
@@ -268,7 +268,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.level}
                       onChange={(e) => updateToolUsage(tool.id, 'level', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
+                      className={`w-full h-3 rounded-lg appearance-none cursor-pointer slider ${getSliderTrackColor(usage.level)}`}
                       style={{
                         background: `linear-gradient(to right, ${getSliderColor(usage.level)} 0%, ${getSliderColor(usage.level)} ${usage.level}%, #e5e7eb ${usage.level}%, #e5e7eb 100%)`
                       }}
@@ -313,20 +313,36 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: white;
-          border: 2px solid #6366f1;
+          background: #ffffff;
+          border: 3px solid currentColor;
           cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+          transition: all 0.2s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
         
         .slider::-moz-range-thumb {
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: white;
-          border: 2px solid #6366f1;
+          background: #ffffff;
+          border: 3px solid currentColor;
           cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+          transition: all 0.2s ease;
+        }
+        
+        .slider::-moz-range-thumb:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+        
+        .slider {
+          transition: all 0.3s ease;
         }
       `}</style>
     </div>
