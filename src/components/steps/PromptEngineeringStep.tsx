@@ -92,10 +92,22 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
 
       {/* Question */}
       <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">Assessment Question</h3>
-        <p className="text-gray-800 font-medium">
-          Under each district, list the full names of the people who live there?
-        </p>
+        <h3 className="text-lg font-semibold text-gray-800 mb-3">Complex Analysis Challenge</h3>
+        <div className="text-gray-800 space-y-2">
+          <p className="font-medium">Analyze the employee database and provide a comprehensive report that includes:</p>
+          <ol className="list-decimal list-inside space-y-1 ml-4 text-sm">
+            <li>For each department, identify the highest-paid employee and their manager (if they have one)</li>
+            <li>Calculate the average salary for employees with performance ratings above 4.0, grouped by years of experience (0-2 years, 3-5 years, 6+ years)</li>
+            <li>List all employees who earn more than their direct manager (if applicable)</li>
+            <li>Identify departments where the average salary is above 60,000 and list the project codes associated with those departments</li>
+            <li>Find employees hired in the same year who work on different projects, and show their salary differences</li>
+          </ol>
+        </div>
+        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
+          <p className="text-sm text-yellow-800">
+            <strong>Challenge Level:</strong> This requires advanced prompt engineering skills including data relationships, conditional logic, grouping, calculations, and multi-step analysis.
+          </p>
+        </div>
       </div>
 
       {/* Error Message */}
