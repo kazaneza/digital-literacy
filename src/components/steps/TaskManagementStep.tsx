@@ -137,16 +137,8 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
       {scenarioDetails && (
         <div className="bg-orange-50 rounded-lg border border-orange-200 p-6">
           <h3 className="text-xl font-semibold text-gray-800 mb-3">{scenarioDetails.title}</h3>
-          <p className="text-gray-700 mb-4">{scenarioDetails.description}</p>
-          
-          <div className="bg-white rounded-lg p-4 mb-4">
-            <h4 className="font-semibold text-gray-800 mb-2">Scenario:</h4>
-            <p className="text-gray-600 whitespace-pre-line">{scenarioDetails.scenario}</p>
-          </div>
-
-
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-            <h4 className="font-semibold text-gray-800 mb-2">Your Task:</h4>
+            <h4 className="font-semibold text-gray-800 mb-2">Scenario:</h4>
             <p className="text-gray-700 font-medium">{scenarioDetails.prompt}</p>
           </div>
         </div>

@@ -18,23 +18,9 @@ class TaskManagementEvaluatorService:
         
         self.scenarios = {
             "team_workflow": {
-            "title": "AI-Enhanced Team Workflow Management",
-            "description": "Organize a multi-person team project with multiple deadlines using AI tools",
-            "scenario": """You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?
-
-Team Members:
-- You (Team Lead)
-- Sarah (Writer/Researcher) 
-- Mike (Reviewer/Editor)
-
-5 Deadlines:
-1. Initial research report (Day 3)
-2. Draft analysis document (Day 6) 
-3. Peer review completion (Day 9)
-4. Final report revision (Day 12)
-5. Final submission with presentation (Day 14)
-
-Each deadline involves multiple sub-tasks that need coordination between team members.""",
+            "title": "Team Workflow Management",
+            "description": "Organize a team project with multiple deadlines",
+            "scenario": "You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?",
             "requirements": [],
             "prompt": "You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?"
         }
