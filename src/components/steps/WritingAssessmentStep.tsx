@@ -39,7 +39,7 @@ interface WritingAssessmentStepProps {
 
 const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplete, isCompleted }) => {
   const [toolUsages, setToolUsages] = useState<ToolUsage[]>([]);
-  const [isCompleted, setIsCompletedState] = useState(false);
+  const [isStepCompletedInternally, setIsStepCompletedInternally] = useState(false);
 
   const aiTools: AITool[] = [
     {
@@ -172,7 +172,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
       toolUsages
     };
 
-    setIsCompletedState(true);
+    setIsStepCompletedInternally(true);
     onComplete(evaluation);
   };
 
@@ -289,7 +289,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
       <div className="flex justify-end">
         <button
           onClick={calculateResults}
-          disabled={!canComplete || isCompleted}
+          disabled={!canComplete || isStepCompletedInternally}
           className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-lg font-semibold flex items-center space-x-2 transition-colors"
         >
           <Sliders className="w-5 h-5" />
@@ -298,7 +298,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
       </div>
 
       {/* Completion Message */}
-      {isCompleted && (
+      {isStepCompletedInternally && (
         <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
