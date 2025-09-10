@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import List
 from models.assessment import WritingRequest, WritingEvaluationResponse, WritingCriteria
 
 class WritingEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.writing_tasks = {
             "business_email": {
                 "title": "Professional Business Email",
@@ -83,7 +87,7 @@ class WritingEvaluatorService:
         }}
         """
         
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a professional writing instructor evaluating business writing assignments. Always respond with valid JSON."},

@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import List
 from models.assessment import DataAnalysisRequest, DataAnalysisEvaluationResponse, DataAnalysisCriteria
 
 class DataAnalysisEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.analysis_scenarios = {
             "sales_analysis": {
                 "title": "AI-Powered Sales Performance Analysis",
@@ -135,7 +139,7 @@ class DataAnalysisEvaluatorService:
         }}
         """
         
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a data analysis and business intelligence expert evaluating AI-powered analytical approaches. Always respond with valid JSON."},

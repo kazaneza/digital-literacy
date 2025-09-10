@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import List
 from models.assessment import PresentationRequest, PresentationEvaluationResponse, PresentationCriteria
 
 class PresentationEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.presentation_scenarios = {
             "executive_briefing": {
                 "title": "AI-Enhanced Executive Briefing",
@@ -141,7 +145,7 @@ Time limit: 20 minutes with 10 minutes for Q&A""",
         }}
         """
         
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a presentation design and communication expert evaluating AI-enhanced presentation development skills. Always respond with valid JSON."},

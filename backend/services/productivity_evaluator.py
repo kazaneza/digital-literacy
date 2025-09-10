@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import List
 from models.assessment import ProductivityRequest, ProductivityEvaluationResponse, ProductivityCriteria
 
 class ProductivityEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.automation_scenarios = {
             "email_automation": {
                 "title": "AI-Powered Email Management & Automation",
@@ -141,7 +145,7 @@ Total time: 60 minutes per application × 500 applications = 500 hours monthly""
         }}
         """
         
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a workflow automation and productivity expert evaluating AI-driven process improvement solutions. Always respond with valid JSON."},

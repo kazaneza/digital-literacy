@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import List
 from models.assessment import TaskManagementRequest, TaskManagementEvaluationResponse, TaskManagementCriteria
 
 class TaskManagementEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.scenarios = {
             "project_planning": {
                 "title": "AI-Assisted Project Planning",
@@ -112,7 +116,7 @@ Total: 65 minutes per application = 216 hours monthly""",
         }}
         """
         
-        response = openai.chat.completions.create(
+        response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a productivity and workflow optimization expert evaluating task management skills with AI integration. Always respond with valid JSON."},

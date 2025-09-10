@@ -1,10 +1,14 @@
 import openai
 import json
+import os
 from typing import Dict, Any
 from models.assessment import PromptRequest, EvaluationResponse, EvaluationCriteria
 
 class PromptEvaluatorService:
     def __init__(self):
+        # Initialize OpenAI client properly
+        self.client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        
         self.sample_data = """
 ID | First Name | Last Name | District | Occupation
 1  | Jean Bosco | Nkurunziza | Gasabo | Teacher
@@ -30,13 +34,49 @@ ID | First Name | Last Name | District | Occupation
 - Diane Ingabire"""
 
     async def evaluate_prompt(self, request: PromptRequest) -> EvaluationResponse:
+        # First, let's test the user's prompt by generating an answer
+        answer_prompt = f"""
+        Given this data table:
+        {self.sample_data}
+        
+        User's prompt: "{request.prompt}"
+        
+        Please follow the user's prompt exactly and provide the answer they are asking for.
+        """
+        
+        try:
+            # Generate answer using user's prompt
+            answer_response = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that follows user prompts exactly to analyze data."},
+                    {"role": "user", "content": answer_prompt}
+                ],
+                temperature=0.1,
+                max_tokens=500
+            )
+            
+            generated_answer = answer_response.choices[0].message.content.strip()
+            
+        except Exception as e:
+            print(f"Error generating answer: {e}")
+            generated_answer = "Error: Could not generate answer with the provided prompt."
+        
+        # Now evaluate the prompt quality
         evaluation_prompt = f"""
         You are an AI literacy assessment evaluator. Evaluate the following user prompt based on these criteria:
         
         CONTEXT:
-        - Data Table: {self.sample_data}
-        - Question to Answer: {self.assessment_question}
+        - Data Table: 
+        {self.sample_data}
+        - Question to Answer: "{self.assessment_question}"
         - User's Prompt: "{request.prompt}"
+        
+        The correct answer should be:
+        {self.correct_answer}
+        
+        Generated answer from user's prompt:
+        {generated_answer}
         
         EVALUATION CRITERIA (score each out of 100):
         1. Clarity: Is the prompt clear and easy to understand?
@@ -44,8 +84,7 @@ ID | First Name | Last Name | District | Occupation
         3. Completeness: Does it ask for all necessary information to answer the question?
         4. Relevance: Is the prompt relevant to answering the question about districts and names?
         
-        EXPECTED ANSWER:
-        {self.correct_answer}
+        Consider both the quality of the prompt AND how well the generated answer matches the expected answer.
         
         Please respond in this exact JSON format:
         {{
@@ -54,21 +93,45 @@ ID | First Name | Last Name | District | Occupation
             "completeness": <score 0-100>,
             "relevance": <score 0-100>,
             "feedback": "<detailed feedback about the prompt quality>",
-            "answer": "<the answer that would be generated from this prompt, or 'Please refine your prompt' if inadequate>"
+            "answer": "{generated_answer}"
         }}
         """
         
-        response = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful AI literacy assessment evaluator. Always respond with valid JSON."},
-                {"role": "user", "content": evaluation_prompt}
-            ],
-            temperature=0.3,
-            max_tokens=1000
-        )
-        
-        result = json.loads(response.choices[0].message.content)
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful AI literacy assessment evaluator. Always respond with valid JSON."},
+                    {"role": "user", "content": evaluation_prompt}
+                ],
+                temperature=0.3,
+                max_tokens=1000
+            )
+            
+            result = json.loads(response.choices[0].message.content)
+            
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+            # Fallback evaluation
+            result = {
+                "clarity": 50,
+                "specificity": 50,
+                "completeness": 50,
+                "relevance": 50,
+                "feedback": "Error evaluating prompt. Please try again.",
+                "answer": generated_answer
+            }
+        except Exception as e:
+            print(f"Error in evaluation: {e}")
+            # Fallback evaluation
+            result = {
+                "clarity": 50,
+                "specificity": 50,
+                "completeness": 50,
+                "relevance": 50,
+                "feedback": f"Error evaluating prompt: {str(e)}",
+                "answer": generated_answer
+            }
         
         criteria_scores = {
             "clarity": result["clarity"],
