@@ -38,12 +38,12 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         
         self.analysis_scenarios = {
             "employee_analysis": {
-                "title": "Employee Data Analysis with AI",
-                "description": "Analyze employee data to extract complex insights using AI tools",
-                "dataset_context": self.employee_data,
-                "scenario": "The HR department needs a comprehensive analysis of employee data to make strategic decisions about compensation, performance management, and organizational structure.",
+                "title": "Data Analysis & Visualization Challenge",
+                "description": "Use AI tools to analyze complex business data and create insights",
+                "dataset_context": "You have access to employee database with salary, performance, department, and experience data",
+                "scenario": "The HR department has given you an employee database and needs you to analyze compensation gaps. They want to know the exact percentage salary increase needed to bring all low-performing employees (rating < 4.0) up to the average salary of high performers (rating >= 4.0), calculated by department, with total cost impact.",
                 "requirements": [],
-                "prompt": "Calculate the exact percentage increase in average salary that would be needed to bring all employees with performance ratings below 4.0 up to the current average salary of employees with ratings 4.0 and above, grouped by department. Show the calculation breakdown and total cost impact."
+                "prompt": "The HR department has given you an employee database and needs you to analyze compensation gaps. They want to know the exact percentage salary increase needed to bring all low-performing employees (rating < 4.0) up to the average salary of high performers (rating >= 4.0), calculated by department, with total cost impact. How would you approach this complex data analysis task?"
             }
         }
 
