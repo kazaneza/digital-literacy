@@ -30,7 +30,7 @@ interface TaskManagementStepProps {
 }
 
 const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isCompleted }) => {
-  const [selectedScenario, setSelectedScenario] = useState<string>('project_planning');
+  const [selectedScenario, setSelectedScenario] = useState<string>('team_workflow');
   const [scenarioDetails, setScenarioDetails] = useState<TaskManagementScenario | null>(null);
   const [response, setResponse] = useState('');
   const [evaluation, setEvaluation] = useState<TaskManagementEvaluation | null>(null);
@@ -39,22 +39,10 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
 
   const scenarioTypes = [
     { 
-      id: 'project_planning', 
-      name: 'Project Planning', 
-      icon: '📋', 
-      description: 'AI-assisted comprehensive project planning' 
-    },
-    { 
-      id: 'priority_matrix', 
-      name: 'Priority Management', 
-      icon: '⚡', 
-      description: 'Smart task prioritization with AI frameworks' 
-    },
-    { 
-      id: 'workflow_optimization', 
-      name: 'Workflow Optimization', 
-      icon: '🔄', 
-      description: 'Process automation and efficiency improvement' 
+      id: 'team_workflow', 
+      name: 'Team Workflow Management', 
+      icon: '👥', 
+      description: 'AI-enhanced team coordination and deadline management' 
     }
   ];
 
@@ -144,26 +132,6 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
       </div>
 
       {/* Scenario Selection */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-800">Select Management Scenario</h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {scenarioTypes.map((scenario) => (
-            <button
-              key={scenario.id}
-              onClick={() => setSelectedScenario(scenario.id)}
-              className={`p-4 rounded-lg border-2 transition-all text-left ${
-                selectedScenario === scenario.id
-                  ? 'border-orange-500 bg-orange-50'
-                  : 'border-gray-200 hover:border-orange-300'
-              }`}
-            >
-              <div className="text-2xl mb-2">{scenario.icon}</div>
-              <div className="font-semibold text-gray-800 mb-1">{scenario.name}</div>
-              <div className="text-sm text-gray-600">{scenario.description}</div>
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Scenario Details */}
       {scenarioDetails && (
