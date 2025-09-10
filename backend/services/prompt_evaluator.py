@@ -80,6 +80,53 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
 - 2019: James Mugisha (PROJ_A, $70,000) vs Esperance Mukandayisenga (PROJ_C, $48,000) - Difference: $22,000
 - 2023: Paul Nkurunziza (PROJ_A, $35,000) vs Robert Bizimana (PROJ_B, $32,000) - Difference: $3,000"""
 
+    def similarity_ratio(self, str1, str2):
+        """Calculate similarity ratio between two strings"""
+        words1 = set(str1.split())
+        words2 = set(str2.split())
+        if not words1 or not words2:
+            return 0
+        intersection = words1.intersection(words2)
+        return len(intersection) / min(len(words1), len(words2))
+
+    def is_copying_question(self, user_prompt, question_text, requirements_list):
+        """Detect if user is copying the question instead of writing a proper AI prompt"""
+        user_lower = user_prompt.lower().strip()
+        question_lower = question_text.lower().strip()
+        
+        # Check if user prompt contains large portions of the original question
+        if len(user_lower) > 50:  # Only check substantial prompts
+            # Check for direct copying of question text
+            question_words = set(question_lower.split())
+            user_words = set(user_lower.split())
+            overlap_ratio = len(question_words.intersection(user_words)) / len(question_words)
+            
+            if overlap_ratio > 0.6:  # More than 60% word overlap
+                return True
+        
+        # Check if user copied individual requirements
+        for requirement in requirements_list:
+            req_lower = requirement.lower().strip()
+            # Check for exact or near-exact matches of requirements
+            if req_lower in user_lower or self.similarity_ratio(req_lower, user_lower) > 0.8:
+                return True
+        
+        # Check for common copying patterns
+        copying_indicators = [
+            "analyze the employee database and provide",
+            "comprehensive report that includes",
+            "for each department, identify the highest-paid employee and their manager",
+            "calculate the average salary for employees with performance ratings above 4.0",
+            "list all employees who earn more than their direct manager",
+            "identify departments where the average salary is above 60,000",
+            "find employees hired in the same year who work on different projects"
+        ]
+        
+        for indicator in copying_indicators:
+            if indicator in user_lower:
+                return True
+        
+        return False
     async def evaluate_prompt(self, request: PromptRequest) -> EvaluationResponse:
         # First, let's test the user's prompt by generating an answer
         answer_prompt = f"""
@@ -109,56 +156,8 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
             print(f"Error generating answer: {e}")
             generated_answer = "Error: Could not generate answer with the provided prompt."
         
-        # Check for direct copying with much stricter detection
-        def is_copying_question(user_prompt, question_text, requirements_list):
-            user_lower = user_prompt.lower().strip()
-            question_lower = question_text.lower().strip()
-            
-            # Check if user prompt contains large portions of the original question
-            if len(user_lower) > 50:  # Only check substantial prompts
-                # Check for direct copying of question text
-                question_words = set(question_lower.split())
-                user_words = set(user_lower.split())
-                overlap_ratio = len(question_words.intersection(user_words)) / len(question_words)
-                
-                if overlap_ratio > 0.6:  # More than 60% word overlap
-                    return True
-            
-            # Check if user copied individual requirements
-            for requirement in requirements_list:
-                req_lower = requirement.lower().strip()
-                # Check for exact or near-exact matches of requirements
-                if req_lower in user_lower or self.similarity_ratio(req_lower, user_lower) > 0.8:
-                    return True
-            
-            # Check for common copying patterns
-            copying_indicators = [
-                "analyze the employee database and provide",
-                "comprehensive report that includes",
-                "for each department, identify the highest-paid employee and their manager",
-                "calculate the average salary for employees with performance ratings above 4.0",
-                "list all employees who earn more than their direct manager",
-                "identify departments where the average salary is above 60,000",
-                "find employees hired in the same year who work on different projects"
-            ]
-            
-            for indicator in copying_indicators:
-                if indicator in user_lower:
-                    return True
-            
-            return False
-        
-        def similarity_ratio(str1, str2):
-            """Calculate similarity ratio between two strings"""
-            words1 = set(str1.split())
-            words2 = set(str2.split())
-            if not words1 or not words2:
-                return 0
-            intersection = words1.intersection(words2)
-            return len(intersection) / min(len(words1), len(words2))
-        
         # Check if user is copying
-        is_copying = is_copying_question(request.prompt, self.assessment_question, self.question_requirements)
+        is_copying = self.is_copying_question(request.prompt, self.assessment_question, self.question_requirements)
         
         # Now evaluate the prompt quality
         evaluation_prompt = f"""
