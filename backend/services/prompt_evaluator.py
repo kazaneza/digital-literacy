@@ -42,6 +42,15 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
 4. Identify departments where the average salary is above 60,000 and list the project codes associated with those departments
 5. Find employees hired in the same year who work on different projects, and show their salary differences"""
         
+        # Store the individual requirements for strict matching
+        self.question_requirements = [
+            "For each department, identify the highest-paid employee and their manager (if they have one)",
+            "Calculate the average salary for employees with performance ratings above 4.0, grouped by years of experience (0-2 years, 3-5 years, 6+ years)",
+            "List all employees who earn more than their direct manager (if applicable)",
+            "Identify departments where the average salary is above 60,000 and list the project codes associated with those departments",
+            "Find employees hired in the same year who work on different projects, and show their salary differences"
+        ]
+        
         self.correct_answer = """**COMPREHENSIVE EMPLOYEE ANALYSIS REPORT**
 
 **1. Highest-Paid Employee per Department with Manager:**
@@ -100,6 +109,57 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
             print(f"Error generating answer: {e}")
             generated_answer = "Error: Could not generate answer with the provided prompt."
         
+        # Check for direct copying with much stricter detection
+        def is_copying_question(user_prompt, question_text, requirements_list):
+            user_lower = user_prompt.lower().strip()
+            question_lower = question_text.lower().strip()
+            
+            # Check if user prompt contains large portions of the original question
+            if len(user_lower) > 50:  # Only check substantial prompts
+                # Check for direct copying of question text
+                question_words = set(question_lower.split())
+                user_words = set(user_lower.split())
+                overlap_ratio = len(question_words.intersection(user_words)) / len(question_words)
+                
+                if overlap_ratio > 0.6:  # More than 60% word overlap
+                    return True
+            
+            # Check if user copied individual requirements
+            for requirement in requirements_list:
+                req_lower = requirement.lower().strip()
+                # Check for exact or near-exact matches of requirements
+                if req_lower in user_lower or self.similarity_ratio(req_lower, user_lower) > 0.8:
+                    return True
+            
+            # Check for common copying patterns
+            copying_indicators = [
+                "analyze the employee database and provide",
+                "comprehensive report that includes",
+                "for each department, identify the highest-paid employee and their manager",
+                "calculate the average salary for employees with performance ratings above 4.0",
+                "list all employees who earn more than their direct manager",
+                "identify departments where the average salary is above 60,000",
+                "find employees hired in the same year who work on different projects"
+            ]
+            
+            for indicator in copying_indicators:
+                if indicator in user_lower:
+                    return True
+            
+            return False
+        
+        def similarity_ratio(str1, str2):
+            """Calculate similarity ratio between two strings"""
+            words1 = set(str1.split())
+            words2 = set(str2.split())
+            if not words1 or not words2:
+                return 0
+            intersection = words1.intersection(words2)
+            return len(intersection) / min(len(words1), len(words2))
+        
+        # Check if user is copying
+        is_copying = is_copying_question(request.prompt, self.assessment_question, self.question_requirements)
+        
         # Now evaluate the prompt quality
         evaluation_prompt = f"""
         You are an AI literacy assessment evaluator. Evaluate the following user prompt based on these criteria:
@@ -116,51 +176,39 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         Generated answer from user's prompt:
         {generated_answer}
         
-        CRITICAL EVALUATION RULES:
-        1. DETECT QUESTION COPYING: If the user's prompt is just copying/rephrasing the original question without proper AI prompt structure, score very low (under 30%).
-        2. PROPER AI PROMPT STRUCTURE: A good prompt should be written AS IF talking to an AI assistant, using clear instructions like "Analyze this data...", "Please examine...", "Based on the table..."
-        3. PROMPT vs QUESTION: The user should create an AI PROMPT (instructions to AI), NOT just restate the question.
-        4. SPECIFICITY TEST: The prompt should specify HOW to analyze the data, not just WHAT to find.
+        CRITICAL DETECTION: The user appears to be copying the question: {is_copying}
         
-        EXAMPLES OF BAD PROMPTS (should score low):
-        - Just copying the question word-for-word
-        - "Analyze the employee database and provide a comprehensive report that includes: 1. For each department..." (this is just the question)
-        - Restating requirements without AI instruction structure
+        MANDATORY EVALUATION RULES:
+        1. IF COPYING DETECTED (is_copying = True): ALL scores must be 0-25% maximum
+        2. PROPER AI PROMPT STRUCTURE: Must use phrases like "Please analyze...", "I need you to...", "Based on the data, can you..."
+        3. INSTRUCTION FORMAT: Should be written as instructions TO an AI, not as a list of requirements
+        4. NO QUESTION COPYING: Any direct copying of the original question requirements should result in very low scores
         
-        EXAMPLES OF GOOD PROMPTS (should score high):
-        - "Please analyze the employee data table systematically. First, examine each department to find the highest-paid employee and identify their manager using the Manager_ID field..."
-        - "Based on the employee database provided, I need you to perform a multi-step analysis. Start by filtering employees with performance ratings above 4.0..."
-        - "Using the employee data, please create a comprehensive report by following these analytical steps..."
+        EXAMPLES OF COPYING (must score 0-25%):
+        - "For each department, identify the highest-paid employee and their manager"
+        - "Calculate the average salary for employees with performance ratings above 4.0"
+        - Any direct copying of the numbered requirements
+        - Lists that match the original question structure
+        
+        EXAMPLES OF GOOD PROMPTS (can score 75-100%):
+        - "Please systematically analyze the employee database. Start by examining each department to find who earns the most and identify their reporting manager..."
+        - "I need you to perform a comprehensive analysis of this employee data. Begin by processing departmental salary information..."
+        - "Based on the employee table, can you help me understand the salary and performance relationships by first looking at..."
+        
         EVALUATION CRITERIA (score each out of 100):
-        1. Clarity: Is the prompt clear and written as proper AI instructions (not just copying the question)?
-        2. Specificity: Does it specify exactly what data analysis steps to take and how to process the data?
-        3. Completeness: Does it provide complete instructions for all required analysis parts?
-        4. Relevance: Is it structured as a proper AI prompt rather than just restating the question?
+        1. Clarity: Is it clear and written as AI instructions (NOT copying)?
+        2. Specificity: Does it specify HOW to analyze, not just WHAT to find?
+        3. Completeness: Complete instructions without copying requirements?
+        4. Relevance: Proper AI prompt structure, not question restatement?
         
-        CRITICAL EVALUATION POINTS:
-        1. If the user just copied/rephrased the question, score all criteria under 30%
-        2. The prompt must be written AS INSTRUCTIONS TO AN AI, not as a question restatement
-        3. Good prompts use phrases like "Please analyze...", "Based on the data...", "I need you to..."
-        4. The prompt should show understanding of how to structure AI instructions
-        5. Must demonstrate actual prompt engineering skills, not just comprehension
+        STRICT SCORING RULES:
+        - If copying detected: Maximum 25% on all criteria
+        - If no AI instruction phrases: Maximum 40% on all criteria  
+        - If just listing requirements: Maximum 50% on all criteria
+        - Only proper AI prompts can score above 75%
         
-        SCORING GUIDELINES:
-        - Question copying/rephrasing: 0-30% on all criteria
-        - Poor AI instruction structure: 30-50%
-        - Good AI prompt structure but incomplete: 50-75%
-        - Excellent AI prompt with proper structure: 75-100%
-        
-        Compare the user's prompt structure:
         User Prompt: "{request.prompt}"
-        Original Question: "{self.assessment_question}"
-        Generated: {generated_answer}
-        Expected Answer Format: {self.correct_answer}
-        
-        Score harshly if:
-        - User just copied the question
-        - Prompt doesn't sound like instructions to an AI
-        - Generated answer doesn't match expected comprehensive analysis
-        - Shows no understanding of prompt engineering principles
+        Copying Detected: {is_copying}
         
         Please respond in this exact JSON format:
         {{
@@ -169,7 +217,8 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
             "completeness": <score 0-100>,
             "relevance": <score 0-100>,
             "feedback": "<detailed feedback about the prompt quality and whether it actually answers the question correctly>",
-            "answer": "{generated_answer}"
+            "answer": "{generated_answer}",
+            "copying_detected": {is_copying}
         }}
         """
         
