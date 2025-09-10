@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, Send, CheckCircle, XCircle, Loader2, TrendingUp, Database } from 'lucide-react';
+import DataTable from '../DataTable';
 
 interface DataAnalysisScenario {
   title: string;
@@ -33,39 +34,12 @@ interface DataAnalysisStepProps {
 }
 
 const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompleted }) => {
-  const [selectedAnalysis, setSelectedAnalysis] = useState<string>('sales_analysis');
+  const [selectedAnalysis, setSelectedAnalysis] = useState<string>('employee_analysis');
   const [scenarioDetails, setScenarioDetails] = useState<DataAnalysisScenario | null>(null);
   const [approach, setApproach] = useState('');
   const [evaluation, setEvaluation] = useState<DataAnalysisEvaluation | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const analysisTypes = [
-    { 
-      id: 'sales_analysis', 
-      name: 'Sales Performance Analysis', 
-      icon: '📊', 
-      description: 'AI-powered quarterly sales data analysis and insights' 
-    },
-    { 
-      id: 'customer_insights', 
-      name: 'Customer Behavior Analysis', 
-      icon: '👥', 
-      description: 'AI-enhanced customer segmentation and behavior patterns' 
-    },
-    { 
-      id: 'financial_reporting', 
-      name: 'Financial Reporting Automation', 
-      icon: '💰', 
-      description: 'Automated financial analysis and reporting with AI' 
-    },
-    { 
-      id: 'risk_assessment', 
-      name: 'Risk Analysis & Monitoring', 
-      icon: '⚠️', 
-      description: 'AI-driven risk assessment and predictive monitoring' 
-    }
-  ];
 
   useEffect(() => {
     fetchScenarioDetails();
@@ -73,7 +47,7 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
 
   const fetchScenarioDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/assessment/data-analysis-scenario/${selectedAnalysis}`);
+      const response = await fetch(`http://localhost:8000/assessment/data-analysis-scenario/employee_analysis`);
       if (response.ok) {
         const scenario = await response.json();
         setScenarioDetails(scenario);
@@ -96,7 +70,7 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          analysis_type: selectedAnalysis,
+          analysis_type: 'employee_analysis',
           user_approach: approach,
           dataset_context: scenarioDetails?.dataset_context || '',
           visualization_requirements: scenarioDetails?.requirements || []
@@ -153,26 +127,10 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
         </p>
       </div>
 
-      {/* Analysis Type Selection */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-800">Select Analysis Scenario</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          {analysisTypes.map((analysis) => (
-            <button
-              key={analysis.id}
-              onClick={() => setSelectedAnalysis(analysis.id)}
-              className={`p-4 rounded-lg border-2 transition-all text-left ${
-                selectedAnalysis === analysis.id
-                  ? 'border-indigo-500 bg-indigo-50'
-                  : 'border-gray-200 hover:border-indigo-300'
-              }`}
-            >
-              <div className="text-2xl mb-2">{analysis.icon}</div>
-              <div className="font-semibold text-gray-800 mb-1">{analysis.name}</div>
-              <div className="text-sm text-gray-600">{analysis.description}</div>
-            </button>
-          ))}
-        </div>
+      {/* Employee Data Table */}
+      <div className="bg-gray-50 rounded-lg p-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Employee Database</h3>
+        <DataTable />
       </div>
 
       {/* Scenario Details */}
@@ -181,30 +139,8 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
           <h3 className="text-xl font-semibold text-gray-800 mb-3">{scenarioDetails.title}</h3>
           <p className="text-gray-700 mb-4">{scenarioDetails.description}</p>
           
-          <div className="bg-white rounded-lg p-4 mb-4">
-            <h4 className="font-semibold text-gray-800 mb-2 flex items-center space-x-2">
-              <Database className="w-4 h-4" />
-              <span>Dataset Context:</span>
-            </h4>
-            <p className="text-gray-600 whitespace-pre-line text-sm">{scenarioDetails.dataset_context}</p>
-          </div>
-
-          <div className="bg-white rounded-lg p-4 mb-4">
-            <h4 className="font-semibold text-gray-800 mb-2">Business Scenario:</h4>
-            <p className="text-gray-600">{scenarioDetails.scenario}</p>
-          </div>
-
-          <div className="mb-4">
-            <h4 className="font-semibold text-gray-800 mb-2">Requirements:</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {scenarioDetails.requirements.map((req, index) => (
-                <li key={index} className="text-gray-600">{req}</li>
-              ))}
-            </ul>
-          </div>
-
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
-            <h4 className="font-semibold text-gray-800 mb-2">Your Challenge:</h4>
+            <h4 className="font-semibold text-gray-800 mb-2">Complex Analysis Challenge:</h4>
             <p className="text-gray-700 font-medium">{scenarioDetails.prompt}</p>
           </div>
         </div>
@@ -212,17 +148,17 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
 
       {/* Analysis Approach Area */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-800">Your AI-Powered Analysis Approach</h3>
+        <h3 className="text-lg font-semibold text-gray-800">Your AI-Powered Data Analysis Approach</h3>
         <div className="space-y-4">
           <textarea
             value={approach}
             onChange={(e) => setApproach(e.target.value)}
-            placeholder="Describe your comprehensive approach to this data analysis challenge. Include:
-• Specific AI tools you would use for data processing and analysis
-• Your analytical methodology and techniques
-• Types of visualizations and dashboards you would create
-• How you would generate actionable insights
-• Expected outcomes and business impact..."
+            placeholder="Describe how you would approach this complex data analysis challenge. Include:
+• What AI tools you would use to analyze the employee data
+• Your step-by-step analytical approach
+• How you would calculate the required metrics
+• What visualizations you would create
+• How AI would help you ensure accuracy..."
             className="w-full h-64 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
           />
           <div className="flex justify-between items-center">

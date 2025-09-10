@@ -16,95 +16,39 @@ class DataAnalysisEvaluatorService:
             raise ValueError("OPENAI_API_KEY environment variable is not set")
         self.client = openai.OpenAI(api_key=api_key)
         
+        # Use the same employee data from prompt engineering
+        self.employee_data = """
+Employee_ID | First_Name | Last_Name | Department | Position | Salary | Years_Experience | Manager_ID | Project_Code | Performance_Rating | Location | Join_Date
+E001 | Jean | Uwimana | IT | Senior Developer | 85000 | 8 | E010 | PROJ_A | 4.2 | Kigali | 2016-03-15
+E002 | Marie | Mukamana | Finance | Analyst | 45000 | 3 | E011 | PROJ_B | 3.8 | Kigali | 2021-07-20
+E003 | Paul | Nkurunziza | IT | Junior Developer | 35000 | 1 | E001 | PROJ_A | 3.5 | Kigali | 2023-01-10
+E004 | Grace | Uwase | HR | Manager | 75000 | 12 | NULL | PROJ_C | 4.5 | Musanze | 2012-09-05
+E005 | David | Habimana | Finance | Senior Analyst | 65000 | 6 | E011 | PROJ_B | 4.1 | Kigali | 2018-11-30
+E006 | Sarah | Ingabire | Marketing | Coordinator | 40000 | 2 | E012 | PROJ_D | 3.9 | Huye | 2022-05-18
+E007 | James | Mugisha | IT | DevOps Engineer | 70000 | 5 | E010 | PROJ_A | 4.0 | Kigali | 2019-08-12
+E008 | Alice | Nyirahabimana | Sales | Representative | 38000 | 4 | E013 | PROJ_E | 3.6 | Rubavu | 2020-02-28
+E009 | Robert | Bizimana | Finance | Junior Analyst | 32000 | 1 | E005 | PROJ_B | 3.4 | Kigali | 2023-06-01
+E010 | Emmanuel | Kayitare | IT | Department Head | 95000 | 15 | NULL | PROJ_A | 4.7 | Kigali | 2009-01-20
+E011 | Claudine | Mukamazimpaka | Finance | Department Head | 90000 | 10 | NULL | PROJ_B | 4.3 | Kigali | 2014-04-10
+E012 | Patrick | Nsengimana | Marketing | Department Head | 88000 | 9 | NULL | PROJ_D | 4.4 | Kigali | 2015-07-25
+E013 | Immaculee | Uwimana | Sales | Department Head | 92000 | 11 | NULL | PROJ_E | 4.6 | Kigali | 2013-12-03
+E014 | Thomas | Hakizimana | Operations | Manager | 72000 | 7 | NULL | PROJ_F | 4.2 | Gisenyi | 2017-10-14
+E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C | 3.7 | Musanze | 2019-03-22
+"""
+        
         self.analysis_scenarios = {
-            "sales_analysis": {
-                "title": "AI-Powered Sales Performance Analysis",
-                "description": "Analyze quarterly sales data to identify trends, patterns, and opportunities using AI tools",
-                "dataset_context": """Bank of Kigali Q4 2024 Sales Data:
-- 15,000+ customer transactions across 25 branches
-- Product categories: Savings, Loans, Credit Cards, Insurance, Investment
-- Customer segments: Individual, SME, Corporate
-- Geographic distribution: Kigali (60%), Other provinces (40%)
-- Revenue: $12.5M total, 8% growth from Q3
-- Key metrics: Customer acquisition cost, lifetime value, conversion rates""",
-                "scenario": """You are tasked with analyzing Bank of Kigali's Q4 2024 sales performance data to prepare insights for the executive team. The data includes transaction volumes, revenue by product line, customer demographics, branch performance, and seasonal trends. Management wants to understand what drove the 8% quarterly growth and identify opportunities for Q1 2025.""",
-                "requirements": [
-                    "Identify key performance drivers and growth factors",
-                    "Compare performance across branches and regions",
-                    "Analyze customer segment behavior and preferences",
-                    "Create executive-ready visualizations and dashboards",
-                    "Provide actionable recommendations for Q1 strategy",
-                    "Demonstrate effective use of AI analysis tools"
-                ],
-                "prompt": "How would you use AI tools to analyze this sales data and create compelling visualizations? Describe your analytical approach, the AI tools you'd use, and the specific insights and visualizations you'd create for the executive presentation."
-            },
-            "customer_insights": {
-                "title": "AI-Enhanced Customer Behavior Analysis",
-                "description": "Use AI to analyze customer data and generate actionable insights for personalized banking services",
-                "dataset_context": """Customer Behavior Dataset:
-- 50,000 active customers with 2+ years transaction history
-- Demographics: Age, income, location, occupation, family status
-- Banking behavior: Transaction frequency, channel preferences, product usage
-- Digital engagement: Mobile app usage, online banking activity, support interactions
-- Life events: Recent graduates, new homeowners, retirees, business owners
-- Satisfaction scores and feedback from surveys""",
-                "scenario": """The marketing team wants to launch personalized banking campaigns and improve customer experience. They need insights on customer segments, behavior patterns, and preferences to create targeted offers and improve service delivery. The goal is to increase customer engagement by 25% and cross-selling by 15%.""",
-                "requirements": [
-                    "Segment customers based on behavior and demographics",
-                    "Identify patterns in product usage and preferences",
-                    "Predict customer needs and life stage transitions",
-                    "Create customer journey visualizations",
-                    "Recommend personalization strategies",
-                    "Show AI-driven predictive insights"
-                ],
-                "prompt": "How would you leverage AI tools to analyze customer behavior and create actionable insights for personalized banking? Detail your segmentation approach, the AI techniques you'd use, and the visualizations that would help the marketing team understand customer patterns."
-            },
-            "financial_reporting": {
-                "title": "Automated Financial Reporting with AI",
-                "description": "Create comprehensive financial reports and risk assessments using AI-powered analysis",
-                "dataset_context": """Financial Data for Analysis:
-- Monthly P&L statements for 12 months
-- Balance sheet data with asset/liability breakdown
-- Risk metrics: Credit risk, operational risk, market risk
-- Regulatory compliance data and ratios
-- Budget vs. actual performance across departments
-- Economic indicators and market conditions impact""",
-                "scenario": """The finance department needs to automate their monthly reporting process and create more insightful analysis for stakeholders. Currently, report preparation takes 5 days and involves manual data compilation from multiple sources. They want to reduce this to 1 day while improving the quality and depth of insights provided to management and regulators.""",
-                "requirements": [
-                    "Automate data collection and validation processes",
-                    "Create dynamic financial dashboards and reports",
-                    "Identify financial trends and anomalies",
-                    "Generate risk assessment visualizations",
-                    "Provide variance analysis and explanations",
-                    "Ensure regulatory compliance reporting"
-                ],
-                "prompt": "How would you use AI tools to automate financial reporting and create comprehensive analysis? Describe your automation strategy, the AI tools for data processing and visualization, and how you'd ensure accuracy while reducing manual effort."
-            },
-            "risk_assessment": {
-                "title": "AI-Driven Risk Analysis and Monitoring",
-                "description": "Implement AI-powered risk assessment and create real-time monitoring dashboards",
-                "dataset_context": """Risk Management Data:
-- Loan portfolio: $500M across 10,000+ loans
-- Default rates by segment, region, and loan type
-- Economic indicators: GDP, inflation, unemployment rates
-- Customer credit scores and payment histories
-- Market volatility and interest rate changes
-- Regulatory requirements and stress test scenarios""",
-                "scenario": """The risk management team needs to enhance their risk monitoring capabilities with AI-powered analysis. They want to predict potential defaults, identify emerging risks, and create real-time dashboards for proactive risk management. The goal is to reduce default rates by 20% and improve early warning systems.""",
-                "requirements": [
-                    "Build predictive models for default probability",
-                    "Create risk heat maps and monitoring dashboards",
-                    "Identify correlations between risk factors",
-                    "Develop early warning indicators",
-                    "Visualize portfolio risk distribution",
-                    "Generate automated risk reports and alerts"
-                ],
-                "prompt": "How would you implement AI-driven risk analysis and create comprehensive monitoring systems? Detail your predictive modeling approach, the AI tools for risk assessment, and the visualizations that would help the risk team proactively manage portfolio risks."
+            "employee_analysis": {
+                "title": "Employee Data Analysis with AI",
+                "description": "Analyze employee data to extract complex insights using AI tools",
+                "dataset_context": self.employee_data,
+                "scenario": "The HR department needs a comprehensive analysis of employee data to make strategic decisions about compensation, performance management, and organizational structure.",
+                "requirements": [],
+                "prompt": "Calculate the exact percentage increase in average salary that would be needed to bring all employees with performance ratings below 4.0 up to the current average salary of employees with ratings 4.0 and above, grouped by department. Show the calculation breakdown and total cost impact."
             }
         }
 
     def get_analysis_scenario(self, analysis_type: str) -> dict:
-        return self.analysis_scenarios.get(analysis_type, self.analysis_scenarios["sales_analysis"])
+        return self.analysis_scenarios.get(analysis_type, self.analysis_scenarios["employee_analysis"])
 
     async def evaluate_data_analysis(self, request: DataAnalysisRequest) -> DataAnalysisEvaluationResponse:
         scenario_info = self.get_analysis_scenario(request.analysis_type)
@@ -114,15 +58,34 @@ class DataAnalysisEvaluatorService:
         
         SCENARIO: {scenario_info['title']}
         DESCRIPTION: {scenario_info['description']}
-        DATASET CONTEXT: {scenario_info['dataset_context']}
+        EMPLOYEE DATA TABLE: 
+        {scenario_info['dataset_context']}
         BUSINESS CONTEXT: {scenario_info['scenario']}
-        QUESTION: {scenario_info['prompt']}
+        COMPLEX ANALYSIS QUESTION: {scenario_info['prompt']}
         
-        REQUIREMENTS:
-        {chr(10).join(f"- {req}" for req in scenario_info['requirements'])}
+        The correct answer should involve:
+        1. Identifying employees with ratings < 4.0 vs >= 4.0
+        2. Calculating current average salaries for each group by department
+        3. Determining the salary gap and percentage increase needed
+        4. Computing total cost impact across all departments
         
         USER'S APPROACH:
         {request.user_approach}
+        
+        EVALUATION FRAMEWORK:
+        Analyze the user's response to determine their AI data analysis literacy:
+        
+        EXPLORER LEVEL (0-50%): Basic approaches
+        - Examples: "I'd use Excel to sort and calculate averages", manual calculations
+        - Shows minimal awareness of AI tools for data analysis
+        
+        PRACTITIONER LEVEL (51-75%): Good use of AI-assisted tools
+        - Examples: "I'd use Power BI with AI insights", "Excel with AI data analysis features"
+        - Shows practical application of AI-enhanced analysis tools
+        
+        INNOVATOR LEVEL (76-100%): Advanced AI integration
+        - Examples: "I'd use Python with AI libraries", "Power BI with custom AI models", "Copilot for advanced data analysis"
+        - Shows sophisticated understanding of AI-powered analytics
         
         EVALUATION CRITERIA (score each out of 100):
         1. Data Understanding: How well does the user understand the dataset and business context?
