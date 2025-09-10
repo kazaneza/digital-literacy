@@ -25,10 +25,17 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
   const [evaluation, setEvaluation] = useState<EvaluationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [isMaxAttemptsReached, setIsMaxAttemptsReached] = useState(false);
+  const maxAttempts = 2;
 
   const evaluatePrompt = async () => {
     if (!prompt.trim()) return;
 
+    // Check if max attempts reached
+    if (attemptCount >= maxAttempts) {
+      return;
+    }
     setLoading(true);
     setError(null);
     
@@ -50,7 +57,24 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
 
       const result = await response.json();
       setEvaluation(result);
-      onComplete(result);
+      
+      // Increment attempt count
+      const newAttemptCount = attemptCount + 1;
+      setAttemptCount(newAttemptCount);
+      
+      // Check if this was the last attempt
+      if (newAttemptCount >= maxAttempts) {
+        setIsMaxAttemptsReached(true);
+        // Auto-complete with current result after 2 attempts
+        setTimeout(() => {
+          onComplete(result);
+        }, 3000); // Give user 3 seconds to see the result
+      } else {
+        // Only complete if they got a good score on first attempt
+        if (result.score >= 75) {
+          onComplete(result);
+        }
+      }
     } catch (error) {
       console.error('Error evaluating prompt:', error);
       setError('Failed to evaluate prompt. Please make sure the backend server is running.');
@@ -126,28 +150,63 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
       {/* Prompt Input */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800">Your AI Prompt</h3>
+        
+        {/* Attempt Counter */}
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-600">
+            Attempt {attemptCount} of {maxAttempts}
+          </div>
+          {attemptCount > 0 && attemptCount < maxAttempts && (
+            <div className="text-sm text-blue-600">
+              {maxAttempts - attemptCount} attempt{maxAttempts - attemptCount !== 1 ? 's' : ''} remaining
+            </div>
+          )}
+        </div>
+        
+        {/* Max Attempts Warning */}
+        {isMaxAttemptsReached && (
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <div className="flex items-center space-x-2">
+              <XCircle className="w-5 h-5 text-orange-600" />
+              <div>
+                <p className="text-orange-800 font-medium">Maximum attempts reached</p>
+                <p className="text-orange-700 text-sm">You've used both attempts. Moving to next assessment in a few seconds...</p>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="space-y-4">
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            disabled={isMaxAttemptsReached}
             placeholder="Write your AI prompt here (e.g., 'Please analyze the employee database systematically. First, examine each department to identify...'). Remember: write instructions TO an AI, not just a restatement of the question."
-            className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className={`w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none ${isMaxAttemptsReached ? 'bg-gray-100 cursor-not-allowed' : ''}`}
           />
           <div className="flex justify-end">
             <button
               onClick={evaluatePrompt}
-              disabled={loading || !prompt.trim()}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 transition-colors"
+              disabled={loading || !prompt.trim() || isMaxAttemptsReached}
+              className={`px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 transition-colors ${
+                isMaxAttemptsReached 
+                  ? 'bg-gray-400 cursor-not-allowed text-white' 
+                  : 'bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white'
+              }`}
             >
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>Evaluating...</span>
                 </>
+              ) : isMaxAttemptsReached ? (
+                <>
+                  <XCircle className="w-5 h-5" />
+                  <span>Max Attempts Reached</span>
+                </>
               ) : (
                 <>
                   <Send className="w-5 h-5" />
-                  <span>Evaluate Prompt</span>
+                  <span>Evaluate Prompt ({maxAttempts - attemptCount} left)</span>
                 </>
               )}
             </button>
@@ -208,6 +267,18 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <span className="text-green-800 font-medium">Step completed! You can proceed to the next assessment.</span>
+              </div>
+            </div>
+          )}
+          
+          {/* Show attempt-based completion message */}
+          {evaluation && attemptCount >= maxAttempts && !isCompleted && (
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-5 h-5 text-blue-600" />
+                <span className="text-blue-800 font-medium">
+                  Assessment completed after {maxAttempts} attempts. Moving to next step...
+                </span>
               </div>
             </div>
           )}
