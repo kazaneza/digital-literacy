@@ -222,7 +222,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       onChange={(e) => updateToolUsage(tool.id, 'familiarity', parseInt(e.target.value))}
                       className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.familiarity)} 0%, ${getSliderColor(usage.familiarity)} ${usage.familiarity}%, #e5e7eb ${usage.familiarity}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, ${getSliderColor(usage.familiarity)} ${usage.familiarity}%, #e5e7eb ${usage.familiarity}%)`
                       }}
                     />
                   </div>
@@ -246,7 +246,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       onChange={(e) => updateToolUsage(tool.id, 'frequency', parseInt(e.target.value))}
                       className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.frequency)} 0%, ${getSliderColor(usage.frequency)} ${usage.frequency}%, #e5e7eb ${usage.frequency}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, ${getSliderColor(usage.frequency)} ${usage.frequency}%, #e5e7eb ${usage.frequency}%)`
                       }}
                     />
                   </div>
@@ -270,7 +270,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       onChange={(e) => updateToolUsage(tool.id, 'level', parseInt(e.target.value))}
                       className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
                       style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.level)} 0%, ${getSliderColor(usage.level)} ${usage.level}%, #e5e7eb ${usage.level}%, #e5e7eb 100%)`
+                        background: `linear-gradient(to right, ${getSliderColor(usage.level)} ${usage.level}%, #e5e7eb ${usage.level}%)`
                       }}
                     />
                   </div>
