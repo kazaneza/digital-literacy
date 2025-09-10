@@ -220,10 +220,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.familiarity}
                       onChange={(e) => updateToolUsage(tool.id, 'familiarity', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.familiarity)} ${usage.familiarity}%, #e5e7eb ${usage.familiarity}%)`
-                      }}
+                      className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{ '--thumb-color': getSliderColor(usage.familiarity) } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -244,10 +242,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.frequency}
                       onChange={(e) => updateToolUsage(tool.id, 'frequency', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.frequency)} ${usage.frequency}%, #e5e7eb ${usage.frequency}%)`
-                      }}
+                      className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{ '--thumb-color': getSliderColor(usage.frequency) } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -268,10 +264,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       max="100"
                       value={usage.level}
                       onChange={(e) => updateToolUsage(tool.id, 'level', parseInt(e.target.value))}
-                      className="w-full h-3 rounded-lg appearance-none cursor-pointer slider"
-                      style={{
-                        background: `linear-gradient(to right, ${getSliderColor(usage.level)} ${usage.level}%, #e5e7eb ${usage.level}%)`
-                      }}
+                      className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                      style={{ '--thumb-color': getSliderColor(usage.level) } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -313,8 +307,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #ffffff;
-          border: 3px solid currentColor;
+          background: var(--thumb-color, #6b7280);
+          border: 2px solid #ffffff;
           cursor: pointer;
           box-shadow: 0 3px 6px rgba(0,0,0,0.3);
           transition: all 0.2s ease;
@@ -329,8 +323,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: #ffffff;
-          border: 3px solid currentColor;
+          background: var(--thumb-color, #6b7280);
+          border: 2px solid #ffffff;
           cursor: pointer;
           box-shadow: 0 3px 6px rgba(0,0,0,0.3);
           transition: all 0.2s ease;
