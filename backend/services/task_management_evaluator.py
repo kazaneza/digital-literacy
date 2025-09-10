@@ -82,6 +82,34 @@ Total: 65 minutes per application = 216 hours monthly""",
                 ],
                 "prompt": "How would you use AI tools to optimize this loan application workflow? Provide a detailed optimization plan with specific AI solutions and expected improvements."
             }
+        },
+        "team_workflow": {
+            "title": "AI-Enhanced Team Workflow Management",
+            "description": "Organize a multi-person team project with multiple deadlines using AI tools",
+            "scenario": """You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?
+
+Team Members:
+- You (Team Lead)
+- Sarah (Writer/Researcher) 
+- Mike (Reviewer/Editor)
+
+5 Deadlines:
+1. Initial research report (Day 3)
+2. Draft analysis document (Day 6) 
+3. Peer review completion (Day 9)
+4. Final report revision (Day 12)
+5. Final submission with presentation (Day 14)
+
+Each deadline involves multiple sub-tasks that need coordination between team members.""",
+            "requirements": [
+                "Create a detailed workflow plan with task assignments",
+                "Show how AI tools will help with project coordination",
+                "Demonstrate task prioritization and dependency management",
+                "Include communication and progress tracking strategies",
+                "Show how to prevent missed deadlines and bottlenecks",
+                "Explain AI-assisted quality control and review processes"
+            ],
+            "prompt": "You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?"
         }
 
     def get_scenario(self, scenario_type: str) -> dict:
@@ -109,6 +137,17 @@ Total: 65 minutes per application = 216 hours monthly""",
         2. Prioritization: Does the response show effective prioritization and decision-making skills?
         3. AI Integration: How effectively are AI tools integrated into the workflow/management process?
         4. Efficiency: Does the solution demonstrate clear efficiency improvements and time savings?
+        
+        SPECIAL FOCUS FOR AI EVALUATION:
+        - Rate how well the user demonstrates understanding of AI tools for task management
+        - Evaluate specific AI tool mentions and their appropriate usage
+        - Assess the level of AI integration in workflow processes
+        - Consider automation potential and smart scheduling approaches
+        
+        GRADING LEVELS:
+        - Explorer (0-50%): Basic understanding, minimal AI integration
+        - Practitioner (51-75%): Good AI tool usage, practical applications
+        - Innovator (76-100%): Advanced AI integration, innovative workflow solutions
         
         Please respond in this exact JSON format:
         {{

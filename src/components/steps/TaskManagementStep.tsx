@@ -146,7 +146,7 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
       {/* Scenario Selection */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-gray-800">Select Management Scenario</h3>
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {scenarioTypes.map((scenario) => (
             <button
               key={scenario.id}
@@ -251,6 +251,13 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
             <div className="flex items-center space-x-3">
               <div className={`px-4 py-2 rounded-lg border-2 font-bold text-xl ${getGradeColor(evaluation.grade)}`}>
                 Grade: {evaluation.grade}
+              </div>
+              <div className={`px-3 py-1 rounded-full font-medium flex items-center space-x-1 ${
+                evaluation.score >= 76 ? 'text-purple-600 bg-purple-100' :
+                evaluation.score >= 51 ? 'text-blue-600 bg-blue-100' :
+                'text-green-600 bg-green-100'
+              }`}>
+                <span>{evaluation.score >= 76 ? 'Innovator' : evaluation.score >= 51 ? 'Practitioner' : 'Explorer'}</span>
               </div>
               <div className={`px-3 py-1 rounded-full font-medium flex items-center space-x-1 ${getEfficiencyColor(evaluation.efficiency_rating)}`}>
                 <Clock className="w-4 h-4" />
