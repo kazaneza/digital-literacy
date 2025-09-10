@@ -17,45 +17,6 @@ class PromptEvaluatorService:
             raise ValueError("OPENAI_API_KEY environment variable is not set")
         self.client = openai.OpenAI(api_key=api_key)
         
-    def sanitize_json_string(self, text: str) -> str:
-        """Remove invalid control characters from JSON string"""
-        # Remove control characters except for \n, \r, \t
-        text = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', text)
-        # Escape any remaining problematic characters
-        text = text.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
-        return text
-
-    def extract_json_from_response(self, response_text: str) -> dict:
-        """Extract and parse JSON from OpenAI response with error handling"""
-        try:
-            # First, try to parse as-is
-            return json.loads(response_text)
-        except json.JSONDecodeError:
-            try:
-                # Sanitize the text and try again
-                sanitized = self.sanitize_json_string(response_text)
-                return json.loads(sanitized)
-            except json.JSONDecodeError:
-                try:
-                    # Try to extract JSON from within the response
-                    json_start = response_text.find('{')
-                    json_end = response_text.rfind('}') + 1
-                    if json_start != -1 and json_end > json_start:
-                        json_part = response_text[json_start:json_end]
-                        sanitized_json = self.sanitize_json_string(json_part)
-                        return json.loads(sanitized_json)
-                except json.JSONDecodeError:
-                    pass
-                
-                # If all else fails, return a default structure
-                return {
-                    "clarity": 20,
-                    "specificity": 20,
-                    "completeness": 20,
-                    "relevance": 20,
-                    "feedback": "Unable to properly evaluate this prompt due to formatting issues. Please try a clearer, more structured prompt.",
-                    "answer": "Error: Could not generate answer due to prompt formatting issues."
-                }
         self.sample_data = """
 Employee_ID | First_Name | Last_Name | Department | Position | Salary | Years_Experience | Manager_ID | Project_Code | Performance_Rating | Location | Join_Date
 E001 | Jean | Uwimana | IT | Senior Developer | 85000 | 8 | E010 | PROJ_A | 4.2 | Kigali | 2016-03-15
@@ -120,10 +81,50 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
 - 2019: James Mugisha (PROJ_A, $70,000) vs Esperance Mukandayisenga (PROJ_C, $48,000) - Difference: $22,000
 - 2023: Paul Nkurunziza (PROJ_A, $35,000) vs Robert Bizimana (PROJ_B, $32,000) - Difference: $3,000"""
 
+    def sanitize_json_string(self, text: str) -> str:
+        """Remove invalid control characters from JSON string"""
+        # Remove control characters except for \n, \r, \t
+        text = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', text)
+        # Escape any remaining problematic characters
+        text = text.replace('\n', '\\n').replace('\r', '\\r').replace('\t', '\\t')
+        return text
+
+    def extract_json_from_response(self, response_text: str) -> dict:
+        """Extract and parse JSON from OpenAI response with error handling"""
+        try:
+            # First, try to parse as-is
+            return json.loads(response_text)
+        except json.JSONDecodeError:
+            try:
+                # Sanitize the text and try again
+                sanitized = self.sanitize_json_string(response_text)
+                return json.loads(sanitized)
+            except json.JSONDecodeError:
+                try:
+                    # Try to extract JSON from within the response
+                    json_start = response_text.find('{')
+                    json_end = response_text.rfind('}') + 1
+                    if json_start != -1 and json_end > json_start:
+                        json_part = response_text[json_start:json_end]
+                        sanitized_json = self.sanitize_json_string(json_part)
+                        return json.loads(sanitized_json)
+                except json.JSONDecodeError:
+                    pass
+                
+                # If all else fails, return a default structure
+                return {
+                    "clarity": 20,
+                    "specificity": 20,
+                    "completeness": 20,
+                    "relevance": 20,
+                    "feedback": "Unable to properly evaluate this prompt due to formatting issues. Please try a clearer, more structured prompt.",
+                    "answer": "Error: Could not generate answer due to prompt formatting issues."
+                }
+
     def similarity_ratio(self, str1, str2):
         """Calculate similarity ratio between two strings"""
-        words1 = set(str1.split())
-        words2 = set(str2.split())
+        words1 = set(str1.lower().split())
+        words2 = set(str2.lower().split())
         if not words1 or not words2:
             return 0
         intersection = words1.intersection(words2)
@@ -167,6 +168,7 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
                 return True
         
         return False
+
     async def evaluate_prompt(self, request: PromptRequest) -> EvaluationResponse:
         # First, let's test the user's prompt by generating an answer
         answer_prompt = f"""
