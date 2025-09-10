@@ -17,28 +17,59 @@ class PromptEvaluatorService:
         self.client = openai.OpenAI(api_key=api_key)
         
         self.sample_data = """
-ID | First Name | Last Name | District | Occupation
-1  | Jean Bosco | Nkurunziza | Gasabo | Teacher
-2  | Aline | Uwase | Kicukiro | Nurse
-3  | Eric | Habimana | Gasabo | Software Dev
-4  | Diane | Ingabire | Rubavu | Nurse
-5  | Patrick | Mugisha | Kicukiro | (empty)
+Employee_ID | First_Name | Last_Name | Department | Position | Salary | Years_Experience | Manager_ID | Project_Code | Performance_Rating | Location | Join_Date
+E001 | Jean | Uwimana | IT | Senior Developer | 85000 | 8 | E010 | PROJ_A | 4.2 | Kigali | 2016-03-15
+E002 | Marie | Mukamana | Finance | Analyst | 45000 | 3 | E011 | PROJ_B | 3.8 | Kigali | 2021-07-20
+E003 | Paul | Nkurunziza | IT | Junior Developer | 35000 | 1 | E001 | PROJ_A | 3.5 | Kigali | 2023-01-10
+E004 | Grace | Uwase | HR | Manager | 75000 | 12 | NULL | PROJ_C | 4.5 | Musanze | 2012-09-05
+E005 | David | Habimana | Finance | Senior Analyst | 65000 | 6 | E011 | PROJ_B | 4.1 | Kigali | 2018-11-30
+E006 | Sarah | Ingabire | Marketing | Coordinator | 40000 | 2 | E012 | PROJ_D | 3.9 | Huye | 2022-05-18
+E007 | James | Mugisha | IT | DevOps Engineer | 70000 | 5 | E010 | PROJ_A | 4.0 | Kigali | 2019-08-12
+E008 | Alice | Nyirahabimana | Sales | Representative | 38000 | 4 | E013 | PROJ_E | 3.6 | Rubavu | 2020-02-28
+E009 | Robert | Bizimana | Finance | Junior Analyst | 32000 | 1 | E005 | PROJ_B | 3.4 | Kigali | 2023-06-01
+E010 | Emmanuel | Kayitare | IT | Department Head | 95000 | 15 | NULL | PROJ_A | 4.7 | Kigali | 2009-01-20
+E011 | Claudine | Mukamazimpaka | Finance | Department Head | 90000 | 10 | NULL | PROJ_B | 4.3 | Kigali | 2014-04-10
+E012 | Patrick | Nsengimana | Marketing | Department Head | 88000 | 9 | NULL | PROJ_D | 4.4 | Kigali | 2015-07-25
+E013 | Immaculee | Uwimana | Sales | Department Head | 92000 | 11 | NULL | PROJ_E | 4.6 | Kigali | 2013-12-03
+E014 | Thomas | Hakizimana | Operations | Manager | 72000 | 7 | NULL | PROJ_F | 4.2 | Gisenyi | 2017-10-14
+E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C | 3.7 | Musanze | 2019-03-22
 """
         
-        self.assessment_question = "Under each district, list the full names of the people who live there?"
+        self.assessment_question = """Analyze the employee database and provide a comprehensive report that includes:
+1. For each department, identify the highest-paid employee and their manager (if they have one)
+2. Calculate the average salary for employees with performance ratings above 4.0, grouped by years of experience (0-2 years, 3-5 years, 6+ years)
+3. List all employees who earn more than their direct manager (if applicable)
+4. Identify departments where the average salary is above 60,000 and list the project codes associated with those departments
+5. Find employees hired in the same year who work on different projects, and show their salary differences"""
         
-        self.correct_answer = """Based on the data table:
+        self.correct_answer = """**COMPREHENSIVE EMPLOYEE ANALYSIS REPORT**
 
-**Gasabo District:**
-- Jean Bosco Nkurunziza
-- Eric Habimana
+**1. Highest-Paid Employee per Department with Manager:**
+- IT Department: Emmanuel Kayitare ($95,000) - No Manager (Department Head)
+- Finance Department: Claudine Mukamazimpaka ($90,000) - No Manager (Department Head)  
+- HR Department: Grace Uwase ($75,000) - No Manager (Department Head)
+- Marketing Department: Patrick Nsengimana ($88,000) - No Manager (Department Head)
+- Sales Department: Immaculee Uwimana ($92,000) - No Manager (Department Head)
+- Operations Department: Thomas Hakizimana ($72,000) - No Manager (Department Head)
 
-**Kicukiro District:**
-- Aline Uwase
-- Patrick Mugisha
+**2. Average Salary by Experience Level (Performance > 4.0):**
+- 0-2 years experience: No employees with rating > 4.0
+- 3-5 years experience: $70,000 (James Mugisha)
+- 6+ years experience: $85,750 (Jean Uwimana: $85,000, David Habimana: $65,000, Grace Uwase: $75,000, Emmanuel Kayitare: $95,000, Claudine Mukamazimpaka: $90,000, Patrick Nsengimana: $88,000, Immaculee Uwimana: $92,000, Thomas Hakizimana: $72,000)
 
-**Rubavu District:**
-- Diane Ingabire"""
+**3. Employees Earning More Than Their Manager:**
+- No employees earn more than their direct managers in this dataset
+
+**4. Departments with Average Salary > $60,000:**
+- IT Department: Average $71,250 - Projects: PROJ_A
+- Finance Department: Average $58,000 - Below threshold
+- Marketing Department: Average $64,000 - Projects: PROJ_D  
+- Sales Department: Average $65,000 - Projects: PROJ_E
+- Operations Department: Average $72,000 - Projects: PROJ_F
+
+**5. Same-Year Hires on Different Projects:**
+- 2019: James Mugisha (PROJ_A, $70,000) vs Esperance Mukandayisenga (PROJ_C, $48,000) - Difference: $22,000
+- 2023: Paul Nkurunziza (PROJ_A, $35,000) vs Robert Bizimana (PROJ_B, $32,000) - Difference: $3,000"""
 
     async def evaluate_prompt(self, request: PromptRequest) -> EvaluationResponse:
         # First, let's test the user's prompt by generating an answer
