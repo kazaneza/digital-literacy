@@ -91,7 +91,20 @@ ID | First Name | Last Name | District | Occupation
         3. Completeness: Does it ask for all necessary information to answer the question?
         4. Relevance: Is the prompt relevant to answering the question about districts and names?
         
-        Consider both the quality of the prompt AND how well the generated answer matches the expected answer.
+        CRITICAL: The user's prompt must generate an answer that matches the expected format. 
+        The question asks for "full names of people under each district" - the answer must include:
+        - District names as headers/categories
+        - Full names (first + last name) of people listed under each district
+        - All people from the data table properly categorized
+        
+        If the generated answer does NOT include the full names of people organized by district, 
+        the scores should be significantly lower (especially completeness and relevance).
+        
+        Compare the generated answer with the expected answer:
+        Expected: Lists districts with full names of people under each
+        Generated: {generated_answer}
+        
+        Score harshly if the generated answer doesn't serve the actual purpose of the question.
         
         Please respond in this exact JSON format:
         {{
@@ -99,7 +112,7 @@ ID | First Name | Last Name | District | Occupation
             "specificity": <score 0-100>,
             "completeness": <score 0-100>,
             "relevance": <score 0-100>,
-            "feedback": "<detailed feedback about the prompt quality>",
+            "feedback": "<detailed feedback about the prompt quality and whether it actually answers the question correctly>",
             "answer": "{generated_answer}"
         }}
         """
