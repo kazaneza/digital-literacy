@@ -38,12 +38,12 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         
         self.analysis_scenarios = {
             "employee_analysis": {
-                "title": "Data Analysis & Visualization Challenge",
-                "description": "Use AI tools to analyze complex business data and create insights",
-                "dataset_context": "You have access to employee database with salary, performance, department, and experience data",
-                "scenario": "The HR department has given you an employee database and needs you to analyze compensation gaps. They want to know the exact percentage salary increase needed to bring all low-performing employees (rating < 4.0) up to the average salary of high performers (rating >= 4.0), calculated by department, with total cost impact.",
+                "title": "Customer Transaction Data Analysis",
+                "description": "Analyze customer transaction data to identify branch performance and trends",
+                "dataset_context": "You have 6 months of customer transaction data across different branches",
+                "scenario": "You have 6 months of customer transaction data across different branches. Management wants to identify top-performing branches, trends in deposits and withdrawals, and highlight any unusual activity.",
                 "requirements": [],
-                "prompt": "The HR department has given you an employee database and needs you to analyze compensation gaps. They want to know the exact percentage salary increase needed to bring all low-performing employees (rating < 4.0) up to the average salary of high performers (rating >= 4.0), calculated by department, with total cost impact. How would you approach this complex data analysis task?"
+                "prompt": "You have 6 months of customer transaction data across different branches. Management wants to identify top-performing branches, trends in deposits and withdrawals, and highlight any unusual activity. How would you approach this data analysis task?"
             }
         }
 
@@ -58,16 +58,9 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         
         SCENARIO: {scenario_info['title']}
         DESCRIPTION: {scenario_info['description']}
-        EMPLOYEE DATA TABLE: 
-        {scenario_info['dataset_context']}
+        DATA CONTEXT: {scenario_info['dataset_context']}
         BUSINESS CONTEXT: {scenario_info['scenario']}
-        COMPLEX ANALYSIS QUESTION: {scenario_info['prompt']}
-        
-        The correct answer should involve:
-        1. Identifying employees with ratings < 4.0 vs >= 4.0
-        2. Calculating current average salaries for each group by department
-        3. Determining the salary gap and percentage increase needed
-        4. Computing total cost impact across all departments
+        ANALYSIS QUESTION: {scenario_info['prompt']}
         
         USER'S APPROACH:
         {request.user_approach}
@@ -76,15 +69,15 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         Analyze the user's response to determine their AI data analysis literacy:
         
         EXPLORER LEVEL (0-50%): Basic approaches
-        - Examples: "I'd use Excel to sort and calculate averages", manual calculations
+        - Examples: "I'd manually calculate totals per branch and make basic charts in Excel"
         - Shows minimal awareness of AI tools for data analysis
         
         PRACTITIONER LEVEL (51-75%): Good use of AI-assisted tools
-        - Examples: "I'd use Power BI with AI insights", "Excel with AI data analysis features"
+        - Examples: "I'd use Excel or Power BI with AI/Copilot to summarize deposits/withdrawals, calculate branch performance, and create visual charts"
         - Shows practical application of AI-enhanced analysis tools
         
         INNOVATOR LEVEL (76-100%): Advanced AI integration
-        - Examples: "I'd use Python with AI libraries", "Power BI with custom AI models", "Copilot for advanced data analysis"
+        - Examples: "I'd automate data cleaning, generate AI-driven insights on branch performance and trends, create interactive dashboards, and flag anomalies or unusual transactions automatically"
         - Shows sophisticated understanding of AI-powered analytics
         
         EVALUATION CRITERIA (score each out of 100):

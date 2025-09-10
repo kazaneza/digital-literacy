@@ -118,11 +118,11 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
       <div className="text-center">
         <div className="flex items-center justify-center space-x-3 mb-4">
           <BarChart3 className="w-8 h-8 text-indigo-600" />
-          <h2 className="text-3xl font-bold text-gray-900">AI-Driven Data Analysis & Visualization</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Data Analysis & Visualization</h2>
         </div>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Demonstrate your ability to leverage AI tools for data analysis, pattern recognition, and creating compelling visualizations. 
-          Choose an analysis scenario and show how you'd use AI to generate actionable business insights.
+          Demonstrate your ability to analyze business data and identify key insights. 
+          Show how you would approach this data analysis challenge.
         </p>
       </div>
 
@@ -140,17 +140,12 @@ const DataAnalysisStep: React.FC<DataAnalysisStepProps> = ({ onComplete, isCompl
 
       {/* Analysis Approach Area */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-gray-800">Your AI-Powered Data Analysis Approach</h3>
+        <h3 className="text-lg font-semibold text-gray-800">Your Data Analysis Approach</h3>
         <div className="space-y-4">
           <textarea
             value={approach}
             onChange={(e) => setApproach(e.target.value)}
-            placeholder="Describe how you would approach this complex data analysis challenge. Include:
-• What AI tools you would use to analyze the employee data
-• Your step-by-step analytical approach
-• How you would calculate the required metrics
-• What visualizations you would create
-• How AI would help you ensure accuracy..."
+            placeholder="Describe how you would approach this data analysis challenge. Include your methodology, tools you would use, and how you would present the findings..."
             className="w-full h-64 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
           />
           <div className="flex justify-between items-center">
