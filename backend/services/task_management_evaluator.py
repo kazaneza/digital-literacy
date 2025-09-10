@@ -46,17 +46,29 @@ class TaskManagementEvaluatorService:
         EVALUATION FRAMEWORK:
         Analyze the user's response to determine their AI literacy level based on the tools and approaches they mention:
         
-        EXPLORER LEVEL (0-50%): Basic/manual approaches
+        EXPLORER LEVEL (0-50%): Basic/manual approaches ONLY
         - Examples: "I'd just email or WhatsApp reminders", basic spreadsheets, manual tracking
-        - Shows minimal awareness of AI/digital tools for project management
+        - Shows minimal or NO awareness of AI/digital tools for project management
+        - Manual processes, basic communication tools
+        - No mention of project management software or AI assistance
         
-        PRACTITIONER LEVEL (51-75%): Good use of standard digital tools
+        PRACTITIONER LEVEL (51-75%): Some digital/AI tools mentioned
         - Examples: "I'd use Teams/Planner to assign tasks, set deadlines", Trello, basic project management tools
-        - Shows practical application of digital collaboration tools
+        - Must mention specific tools like Teams, Planner, Trello
+        - Shows some understanding of digital project management
         
-        INNOVATOR LEVEL (76-100%): Advanced AI integration and automation
+        INNOVATOR LEVEL (76-100%): Advanced AI integration and automation ONLY
         - Examples: "I'd set up Planner/Asana with task dependencies, automate reminders with Copilot/Power Automate, track progress dashboards"
+        - Must mention automation, AI tools like Copilot/Power Automate
         - Shows sophisticated understanding of AI-powered workflow automation
+        
+        STRICT SCORING RULES:
+        - If NO digital tools mentioned: Maximum 35% on all criteria
+        - If only basic communication (email/WhatsApp): Maximum 40% on all criteria
+        - If mentions project tools but no AI: Maximum 60% on all criteria
+        - If mentions AI tools like Copilot/Power Automate: Can score 70-85%
+        - If mentions full automation + AI + dashboards: Can score 85-100%
+        - Random or meaningless responses: Maximum 20% on all criteria
         
         EVALUATION CRITERIA (score each out of 100):
         1. Organization: How well-structured and logical is the approach to task/project management?

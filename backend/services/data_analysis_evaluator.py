@@ -68,17 +68,29 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         EVALUATION FRAMEWORK:
         Analyze the user's response to determine their AI data analysis literacy:
         
-        EXPLORER LEVEL (0-50%): Basic approaches
+        EXPLORER LEVEL (0-50%): Basic/manual approaches
         - Examples: "I'd manually calculate totals per branch and make basic charts in Excel"
-        - Shows minimal awareness of AI tools for data analysis
+        - Shows minimal or NO awareness of AI tools for data analysis
+        - Manual processes, basic Excel without AI features
+        - No mention of automation or AI assistance
         
-        PRACTITIONER LEVEL (51-75%): Good use of AI-assisted tools
+        PRACTITIONER LEVEL (51-75%): Some AI-assisted tools mentioned
         - Examples: "I'd use Excel or Power BI with AI/Copilot to summarize deposits/withdrawals, calculate branch performance, and create visual charts"
-        - Shows practical application of AI-enhanced analysis tools
+        - Must mention specific AI tools like Copilot, Power BI AI features
+        - Shows some understanding of AI-enhanced analysis
         
-        INNOVATOR LEVEL (76-100%): Advanced AI integration
+        INNOVATOR LEVEL (76-100%): Advanced AI integration and automation
         - Examples: "I'd automate data cleaning, generate AI-driven insights on branch performance and trends, create interactive dashboards, and flag anomalies or unusual transactions automatically"
-        - Shows sophisticated understanding of AI-powered analytics
+        - Must mention automation, AI-driven insights, anomaly detection
+        - Shows sophisticated understanding of AI-powered analytics and automation
+        
+        STRICT SCORING RULES:
+        - If NO AI tools mentioned: Maximum 40% on all criteria
+        - If only basic Excel mentioned: Maximum 45% on all criteria  
+        - If mentions "AI" but no specific tools: Maximum 55% on all criteria
+        - If mentions specific AI tools (Copilot, Power BI AI): Can score 60-75%
+        - If mentions automation + AI insights + anomaly detection: Can score 76-100%
+        - Random or meaningless responses: Maximum 20% on all criteria
         
         EVALUATION CRITERIA (score each out of 100):
         1. Data Understanding: How well does the user understand the dataset and business context?
