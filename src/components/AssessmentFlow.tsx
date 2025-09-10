@@ -4,6 +4,8 @@ import PromptEngineeringStep from './steps/PromptEngineeringStep';
 import WritingAssessmentStep from './steps/WritingAssessmentStep';
 import TaskManagementStep from './steps/TaskManagementStep';
 import DataAnalysisStep from './steps/DataAnalysisStep';
+import PresentationStep from './steps/PresentationStep';
+import ProductivityStep from './steps/ProductivityStep';
 import ResultsStep from './steps/ResultsStep';
 
 export interface AssessmentResults {
@@ -40,6 +42,27 @@ export interface AssessmentResults {
     insight_quality: string;
     recommended_tools: string[];
   };
+  presentations?: {
+    score: number;
+    grade: string;
+    isGoodPresentation: boolean;
+    feedback: string;
+    criteria: any;
+    suggestions: string[];
+    engagement_level: string;
+    recommended_tools: string[];
+  };
+  productivity?: {
+    score: number;
+    grade: string;
+    isGoodAutomation: boolean;
+    feedback: string;
+    criteria: any;
+    suggestions: string[];
+    efficiency_gain: string;
+    recommended_tools: string[];
+    implementation_timeline: string;
+  };
 }
 
 interface AssessmentFlowProps {
@@ -56,7 +79,9 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
     { id: 2, title: 'Writing & Document Automation', description: 'Create professional documents with AI' },
     { id: 3, title: 'Task Management & Workflow', description: 'Optimize processes with AI tools' },
     { id: 4, title: 'Data Analysis & Visualization', description: 'AI-powered data insights and visualization' },
-    { id: 5, title: 'Results', description: 'View your assessment results' }
+    { id: 5, title: 'AI-Powered Presentations', description: 'Create compelling presentations with AI' },
+    { id: 6, title: 'Workflow Automation', description: 'Automate processes and boost productivity' },
+    { id: 7, title: 'Results', description: 'View your assessment results' }
   ];
 
   const handleStepComplete = (stepId: number, stepResults: any) => {
@@ -70,6 +95,10 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
       setResults(prev => ({ ...prev, taskManagement: stepResults }));
     } else if (stepId === 4) {
       setResults(prev => ({ ...prev, dataAnalysis: stepResults }));
+    } else if (stepId === 5) {
+      setResults(prev => ({ ...prev, presentations: stepResults }));
+    } else if (stepId === 6) {
+      setResults(prev => ({ ...prev, productivity: stepResults }));
     }
   };
 
@@ -120,6 +149,20 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
           />
         );
       case 5:
+        return (
+          <PresentationStep
+            onComplete={(results) => handleStepComplete(5, results)}
+            isCompleted={completedSteps.has(5)}
+          />
+        );
+      case 6:
+        return (
+          <ProductivityStep
+            onComplete={(results) => handleStepComplete(6, results)}
+            isCompleted={completedSteps.has(6)}
+          />
+        );
+      case 7:
         return (
           <ResultsStep
             results={results}
@@ -178,7 +221,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
         </div>
 
         {/* Navigation */}
-        {currentStep < 5 && (
+        {currentStep < 7 && (
           <div className="flex justify-between items-center">
             <button
               onClick={handlePrevious}

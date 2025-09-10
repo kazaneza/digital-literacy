@@ -14,6 +14,8 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     if (results.writingAssessment?.score) scores.push(results.writingAssessment.score);
     if (results.taskManagement?.score) scores.push(results.taskManagement.score);
     if (results.dataAnalysis?.score) scores.push(results.dataAnalysis.score);
+    if (results.presentations?.score) scores.push(results.presentations.score);
+    if (results.productivity?.score) scores.push(results.productivity.score);
     
     if (scores.length === 0) return 0;
     return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
@@ -59,7 +61,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
       </div>
 
       {/* Individual Results */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Prompt Engineering Results */}
         {results.promptEngineering && (
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -281,6 +283,161 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
               <div className="pt-3 border-t border-gray-200">
                 <p className="text-sm text-gray-600 leading-relaxed">
                   {results.dataAnalysis.feedback}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Presentation Results */}
+        {results.presentations && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+              <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+                <span className="text-pink-600 font-bold">5</span>
+              </div>
+              <span>AI-Powered Presentations</span>
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Grade:</span>
+                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
+                  results.presentations.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
+                  results.presentations.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
+                  results.presentations.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
+                  'text-red-600 bg-red-100 border-red-300'
+                }`}>
+                  {results.presentations.grade}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Engagement:</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  results.presentations.engagement_level === 'Excellent' ? 'text-green-600 bg-green-100' :
+                  results.presentations.engagement_level === 'Good' ? 'text-blue-600 bg-blue-100' :
+                  results.presentations.engagement_level === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
+                  'text-red-600 bg-red-100'
+                }`}>
+                  {results.presentations.engagement_level}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Score:</span>
+                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.presentations.score)}`}>
+                  {results.presentations.score}%
+                </span>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
+                {Object.entries(results.presentations.criteria).map(([criterion, score]) => (
+                  <div key={criterion} className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                      {score}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Recommended Tools:</span>
+                <div className="flex flex-wrap gap-1">
+                  {results.presentations.recommended_tools.slice(0, 3).map((tool, index) => (
+                    <span key={index} className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="pt-3 border-t border-gray-200">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {results.presentations.feedback}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Productivity Results */}
+        {results.productivity && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+              <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <span className="text-yellow-600 font-bold">6</span>
+              </div>
+              <span>Workflow Automation</span>
+            </h3>
+            
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Grade:</span>
+                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
+                  results.productivity.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
+                  results.productivity.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
+                  results.productivity.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
+                  'text-red-600 bg-red-100 border-red-300'
+                }`}>
+                  {results.productivity.grade}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Efficiency Gain:</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  results.productivity.efficiency_gain === 'High' ? 'text-green-600 bg-green-100' :
+                  results.productivity.efficiency_gain === 'Medium' ? 'text-blue-600 bg-blue-100' :
+                  results.productivity.efficiency_gain === 'Low' ? 'text-yellow-600 bg-yellow-100' :
+                  'text-red-600 bg-red-100'
+                }`}>
+                  {results.productivity.efficiency_gain}
+                </span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Score:</span>
+                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.productivity.score)}`}>
+                  {results.productivity.score}%
+                </span>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Timeline:</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                  {results.productivity.implementation_timeline}
+                </span>
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
+                {Object.entries(results.productivity.criteria).map(([criterion, score]) => (
+                  <div key={criterion} className="flex justify-between items-center text-sm">
+                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                      {score}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="space-y-2">
+                <span className="text-gray-600 font-medium">Recommended Tools:</span>
+                <div className="flex flex-wrap gap-1">
+                  {results.productivity.recommended_tools.slice(0, 3).map((tool, index) => (
+                    <span key={index} className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="pt-3 border-t border-gray-200">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {results.productivity.feedback}
                 </p>
               </div>
             </div>
