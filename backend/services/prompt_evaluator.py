@@ -159,6 +159,23 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         # Check if user is copying
         is_copying = self.is_copying_question(request.prompt, self.assessment_question, self.question_requirements)
         
+        # Check if prompt is too short or meaningless
+        is_too_short = len(request.prompt.strip().split()) < 5
+        is_meaningless = any(word in request.prompt.lower().strip() for word in ['hello', 'hi', 'test', 'abc', '123'])
+        
+        # Check if prompt has proper AI instruction structure
+        has_ai_instructions = any(phrase in request.prompt.lower() for phrase in [
+            'please', 'analyze', 'based on', 'i need', 'can you', 'help me',
+            'examine', 'look at', 'find', 'identify', 'calculate', 'list',
+            'show me', 'tell me', 'determine', 'extract'
+        ])
+        
+        # Check if prompt addresses the actual requirements
+        addresses_requirements = any(keyword in request.prompt.lower() for keyword in [
+            'department', 'salary', 'employee', 'manager', 'performance', 'rating',
+            'experience', 'project', 'hire', 'year'
+        ])
+        
         # Now evaluate the prompt quality
         evaluation_prompt = f"""
         You are an AI literacy assessment evaluator. Evaluate the following user prompt based on these criteria:
@@ -175,19 +192,41 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         Generated answer from user's prompt:
         {generated_answer}
         
-        CRITICAL DETECTION: The user appears to be copying the question: {is_copying}
+        CRITICAL ANALYSIS:
+        - Copying detected: {is_copying}
+        - Too short/meaningless: {is_too_short or is_meaningless}
+        - Has AI instruction phrases: {has_ai_instructions}
+        - Addresses actual requirements: {addresses_requirements}
         
         MANDATORY EVALUATION RULES:
-        1. IF COPYING DETECTED (is_copying = True): ALL scores must be 0-25% maximum
-        2. PROPER AI PROMPT STRUCTURE: Must use phrases like "Please analyze...", "I need you to...", "Based on the data, can you..."
-        3. INSTRUCTION FORMAT: Should be written as instructions TO an AI, not as a list of requirements
-        4. NO QUESTION COPYING: Any direct copying of the original question requirements should result in very low scores
+        1. IF COPYING DETECTED: ALL scores must be 0-25% maximum
+        2. IF TOO SHORT OR MEANINGLESS (like "hello", "test", "abc"): ALL scores must be 0-15% maximum
+        3. IF NO AI INSTRUCTION PHRASES: Maximum 30% on all criteria
+        4. IF DOESN'T ADDRESS REQUIREMENTS: Maximum 40% on all criteria
+        5. ONLY prompts that are proper AI instructions AND address the requirements can score above 60%
+        
+        EXAMPLES THAT MUST SCORE 0-15%:
+        - "hello"
+        - "test"
+        - "abc"
+        - "hi there"
+        - Any single word or meaningless phrase
         
         EXAMPLES OF COPYING (must score 0-25%):
         - "For each department, identify the highest-paid employee and their manager"
         - "Calculate the average salary for employees with performance ratings above 4.0"
         - Any direct copying of the numbered requirements
         - Lists that match the original question structure
+        
+        EXAMPLES OF POOR PROMPTS (must score 0-40%):
+        - "Show me the data"
+        - "Give me information"
+        - "What is this?"
+        - Prompts without specific instructions
+        
+        EXAMPLES OF DECENT PROMPTS (can score 50-75%):
+        - "Please analyze the employee data and show me salary information"
+        - "Can you help me understand the employee database?"
         
         EXAMPLES OF GOOD PROMPTS (can score 75-100%):
         - "Please systematically analyze the employee database. Start by examining each department to find who earns the most and identify their reporting manager..."
@@ -201,13 +240,20 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         4. Relevance: Proper AI prompt structure, not question restatement?
         
         STRICT SCORING RULES:
+        - If meaningless/too short: Maximum 15% on all criteria
         - If copying detected: Maximum 25% on all criteria
-        - If no AI instruction phrases: Maximum 40% on all criteria  
+        - If no AI instruction phrases: Maximum 30% on all criteria
+        - If doesn't address requirements: Maximum 40% on all criteria
         - If just listing requirements: Maximum 50% on all criteria
-        - Only proper AI prompts can score above 75%
+        - Only comprehensive AI prompts addressing all requirements can score above 75%
         
         User Prompt: "{request.prompt}"
         Copying Detected: {is_copying}
+        Too Short/Meaningless: {is_too_short or is_meaningless}
+        Has AI Instructions: {has_ai_instructions}
+        Addresses Requirements: {addresses_requirements}
+        
+        IMPORTANT: Be extremely strict. Most prompts should score below 50%. Only truly excellent prompts that demonstrate real prompt engineering skills should score above 75%.
         
         Please respond in this exact JSON format:
         {{
@@ -216,8 +262,7 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
             "completeness": <score 0-100>,
             "relevance": <score 0-100>,
             "feedback": "<detailed feedback about the prompt quality and whether it actually answers the question correctly>",
-            "answer": "{generated_answer}",
-            "copying_detected": {is_copying}
+            "answer": "{generated_answer}"
         }}
         """
         
