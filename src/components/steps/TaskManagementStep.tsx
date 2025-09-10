@@ -144,14 +144,6 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
             <p className="text-gray-600 whitespace-pre-line">{scenarioDetails.scenario}</p>
           </div>
 
-          <div className="mb-4">
-            <h4 className="font-semibold text-gray-800 mb-2">Requirements:</h4>
-            <ul className="list-disc list-inside space-y-1">
-              {scenarioDetails.requirements.map((req, index) => (
-                <li key={index} className="text-gray-600">{req}</li>
-              ))}
-            </ul>
-          </div>
 
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
             <h4 className="font-semibold text-gray-800 mb-2">Your Task:</h4>

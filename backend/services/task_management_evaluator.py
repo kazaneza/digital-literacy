@@ -35,14 +35,7 @@ Team Members:
 5. Final submission with presentation (Day 14)
 
 Each deadline involves multiple sub-tasks that need coordination between team members.""",
-            "requirements": [
-                "Create a detailed workflow plan with task assignments",
-                "Show how AI tools will help with project coordination",
-                "Demonstrate task prioritization and dependency management",
-                "Include communication and progress tracking strategies",
-                "Show how to prevent missed deadlines and bottlenecks",
-                "Explain AI-assisted quality control and review processes"
-            ],
+            "requirements": [],
             "prompt": "You are leading a 3-person team on a project with 5 deadlines over 2 weeks. Tasks include writing, reviewing, and submitting reports. How would you organize the workflow to make sure nothing is missed?"
         }
         }
@@ -61,11 +54,23 @@ Each deadline involves multiple sub-tasks that need coordination between team me
         CONTEXT: {scenario_info['scenario']}
         QUESTION: {scenario_info['prompt']}
         
-        REQUIREMENTS:
-        {chr(10).join(f"- {req}" for req in scenario_info['requirements'])}
-        
         USER'S RESPONSE:
         {request.user_response}
+        
+        EVALUATION FRAMEWORK:
+        Analyze the user's response to determine their AI literacy level based on the tools and approaches they mention:
+        
+        EXPLORER LEVEL (0-50%): Basic/manual approaches
+        - Examples: "I'd just email or WhatsApp reminders", basic spreadsheets, manual tracking
+        - Shows minimal awareness of AI/digital tools for project management
+        
+        PRACTITIONER LEVEL (51-75%): Good use of standard digital tools
+        - Examples: "I'd use Teams/Planner to assign tasks, set deadlines", Trello, basic project management tools
+        - Shows practical application of digital collaboration tools
+        
+        INNOVATOR LEVEL (76-100%): Advanced AI integration and automation
+        - Examples: "I'd set up Planner/Asana with task dependencies, automate reminders with Copilot/Power Automate, track progress dashboards"
+        - Shows sophisticated understanding of AI-powered workflow automation
         
         EVALUATION CRITERIA (score each out of 100):
         1. Organization: How well-structured and logical is the approach to task/project management?
@@ -73,16 +78,6 @@ Each deadline involves multiple sub-tasks that need coordination between team me
         3. AI Integration: How effectively are AI tools integrated into the workflow/management process?
         4. Efficiency: Does the solution demonstrate clear efficiency improvements and time savings?
         
-        SPECIAL FOCUS FOR AI EVALUATION:
-        - Rate how well the user demonstrates understanding of AI tools for task management
-        - Evaluate specific AI tool mentions and their appropriate usage
-        - Assess the level of AI integration in workflow processes
-        - Consider automation potential and smart scheduling approaches
-        
-        GRADING LEVELS:
-        - Explorer (0-50%): Basic understanding, minimal AI integration
-        - Practitioner (51-75%): Good AI tool usage, practical applications
-        - Innovator (76-100%): Advanced AI integration, innovative workflow solutions
         
         Please respond in this exact JSON format:
         {{
