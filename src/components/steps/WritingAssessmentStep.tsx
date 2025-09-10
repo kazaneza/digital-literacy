@@ -209,7 +209,9 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       value={usage.familiarity}
                       onChange={(e) => updateToolUsage(tool.id, 'familiarity', parseInt(e.target.value))}
                       className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{ '--thumb-color': getSliderColor(usage.familiarity) } as React.CSSProperties}
+                      style={{ 
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${usage.familiarity}%, #e5e7eb ${usage.familiarity}%, #e5e7eb 100%)`
+                      } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -231,7 +233,9 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       value={usage.frequency}
                       onChange={(e) => updateToolUsage(tool.id, 'frequency', parseInt(e.target.value))}
                       className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{ '--thumb-color': getSliderColor(usage.frequency) } as React.CSSProperties}
+                      style={{ 
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${usage.frequency}%, #e5e7eb ${usage.frequency}%, #e5e7eb 100%)`
+                      } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -253,7 +257,9 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                       value={usage.level}
                       onChange={(e) => updateToolUsage(tool.id, 'level', parseInt(e.target.value))}
                       className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                      style={{ '--thumb-color': getSliderColor(usage.level) } as React.CSSProperties}
+                      style={{ 
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${usage.level}%, #e5e7eb ${usage.level}%, #e5e7eb 100%)`
+                      } as React.CSSProperties}
                     />
                   </div>
                   <div className="flex justify-between text-xs text-gray-500 mt-2">
@@ -295,7 +301,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: var(--thumb-color, #6b7280);
+          background: #3b82f6;
           border: 2px solid #ffffff;
           cursor: pointer;
           box-shadow: 0 3px 6px rgba(0,0,0,0.3);
@@ -311,7 +317,7 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
           height: 20px;
           width: 20px;
           border-radius: 50%;
-          background: var(--thumb-color, #6b7280);
+          background: #3b82f6;
           border: 2px solid #ffffff;
           cursor: pointer;
           box-shadow: 0 3px 6px rgba(0,0,0,0.3);
