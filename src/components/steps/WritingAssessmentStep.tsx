@@ -116,6 +116,14 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
     return 'Daily';
   };
 
+  const getCriteriaColor = (score: number) => {
+    if (score >= 90) return 'bg-green-100 text-green-800';
+    if (score >= 80) return 'bg-blue-100 text-blue-800';
+    if (score >= 70) return 'bg-yellow-100 text-yellow-800';
+    if (score >= 60) return 'bg-orange-100 text-orange-800';
+    return 'bg-red-100 text-red-800';
+  };
+
   const calculateResults = () => {
     // Calculate overall scores
     const totalFamiliarity = toolUsages.reduce((sum, usage) => sum + usage.familiarity, 0) / toolUsages.length;
@@ -266,8 +274,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                     <span>Manual</span>
                     <span>Automated</span>
                   </div>
-            <div className={`px-4 py-2 rounded-lg font-bold ${getCriteriaColor(evaluation.score)}`}>
-              {evaluation.score}%
+                </div>
+              </div>
             </div>
           );
         })}
