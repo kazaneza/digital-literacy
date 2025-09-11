@@ -70,23 +70,28 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
 
     reportElement.innerHTML = `
       <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; text-align: center; padding: 40px 20px; border-radius: 16px 16px 0 0;">
-        <div style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">🏦 Bank of Kigali</div>
-        <div style="font-size: 16px; opacity: 0.9; font-weight: 500; margin-bottom: 20px;">Digital Literacy Program</div>
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+          <img src="/brand-logo (31).png" alt="Bank of Kigali Logo" style="width: 60px; height: 60px; margin-right: 15px;" />
+          <div>
+            <div style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Bank of Kigali</div>
+            <div style="font-size: 16px; opacity: 0.9; font-weight: 500;">Digital Literacy Program</div>
+          </div>
+        </div>
         <div style="font-size: 28px; font-weight: 700; margin: 20px 0 10px;">AI Literacy Assessment Report</div>
         <div style="font-size: 14px; opacity: 0.8;">Assessment completed on ${getCurrentDate()}</div>
       </div>
       
-      <div style="padding: 40px;">
-        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 30px; border-radius: 16px; margin-bottom: 40px; border: 1px solid #c7d2fe;">
+      <div style="padding: 40px; page-break-inside: avoid;">
+        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 30px; border-radius: 16px; margin-bottom: 40px; border: 1px solid #c7d2fe; page-break-inside: avoid;">
           <h2 style="color: #1e40af; font-size: 24px; margin-bottom: 25px; font-weight: 700;">Executive Summary</h2>
           <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
-            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1;">
+            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1; page-break-inside: avoid;">
               <h3 style="color: #1f2937; font-size: 18px; margin-bottom: 10px; font-weight: 600;">${levelInfo.level}</h3>
               <div style="font-size: 36px; font-weight: 800; color: #3b82f6; margin: 10px 0;">${overallScore}%</div>
               <div style="color: #6b7280; font-size: 14px; font-weight: 500;">Overall AI Literacy Score</div>
               <div style="color: #6b7280; font-size: 12px; margin-top: 8px; line-height: 1.4;">${levelInfo.description}</div>
             </div>
-            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1;">
+            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1; page-break-inside: avoid;">
               <h3 style="color: #1f2937; font-size: 18px; margin-bottom: 10px; font-weight: 600;">${automationReadiness.level}</h3>
               <div style="color: #6b7280; font-size: 14px; font-weight: 500;">Automation Interest</div>
               <div style="color: #6b7280; font-size: 12px; margin-top: 8px; line-height: 1.4;">
@@ -96,7 +101,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
                   'Assessment not completed'}
               </div>
             </div>
-            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1;">
+            <div style="background: white; text-align: center; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 2px solid #e5e7eb; min-width: 180px; flex: 1; page-break-inside: avoid;">
               <div style="font-size: 36px; font-weight: 800; color: #3b82f6; margin: 10px 0;">${Object.keys(results).length}</div>
               <div style="color: #6b7280; font-size: 14px; font-weight: 500;">Assessments Completed</div>
               <div style="color: #6b7280; font-size: 12px; margin-top: 8px; line-height: 1.4;">Out of 5 total assessments</div>
@@ -108,7 +113,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           <h2 style="color: #1f2937; font-size: 24px; margin-bottom: 25px; font-weight: 700;">Detailed Assessment Results</h2>
           
           ${results.promptEngineering ? `
-            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); page-break-inside: avoid;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div style="font-size: 20px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 12px;">
                   <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
@@ -136,7 +141,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           ` : ''}
           
           ${results.writingAssessment ? `
-            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); page-break-inside: avoid;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div style="font-size: 20px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 12px;">
                   <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
@@ -153,7 +158,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           ` : ''}
           
           ${results.taskManagement ? `
-            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); page-break-inside: avoid;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div style="font-size: 20px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 12px;">
                   <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
@@ -181,7 +186,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           ` : ''}
           
           ${results.dataAnalysis ? `
-            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); page-break-inside: avoid;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div style="font-size: 20px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 12px;">
                   <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
@@ -217,7 +222,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           ` : ''}
           
           ${results.productivity ? `
-            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
+            <div style="margin-bottom: 25px; padding: 25px; border: 2px solid #e5e7eb; border-radius: 12px; background: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); page-break-inside: avoid;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div style="font-size: 20px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 12px;">
                   <div style="background: #3b82f6; color: white; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">5</div>
@@ -238,7 +243,7 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
           ` : ''}
         </div>
 
-        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 30px; border-radius: 16px; margin-top: 40px; border: 1px solid #c7d2fe;">
+        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); padding: 30px; border-radius: 16px; margin-top: 40px; border: 1px solid #c7d2fe; page-break-inside: avoid;">
           <h2 style="color: #1e40af; font-size: 24px; margin-bottom: 25px; font-weight: 700;">Development Recommendations</h2>
           <h3 style="color: #1f2937; font-size: 18px; margin: 20px 0 15px; font-weight: 600;">Immediate Actions</h3>
           <ul style="margin: 0; padding-left: 0; list-style: none;">
@@ -319,7 +324,10 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
       scale: 2,
       useCORS: true,
       allowTaint: true,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      logging: false,
+      height: reportElement.scrollHeight,
+      width: reportElement.scrollWidth
     }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
