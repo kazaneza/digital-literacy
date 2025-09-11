@@ -63,12 +63,18 @@ class TaskManagementEvaluatorService:
         - Shows sophisticated understanding of AI-powered workflow automation
         
         STRICT SCORING RULES:
-        - If NO digital tools mentioned: Maximum 35% on all criteria
-        - If only basic communication (email/WhatsApp): Maximum 40% on all criteria
-        - If mentions project tools but no AI: Maximum 60% on all criteria
+        - If meaningless/single word responses (like "okay", "yes", "good"): Maximum 5% on all criteria
+        - If NO digital tools mentioned: Maximum 25% on all criteria
+        - If only basic communication (email/WhatsApp): Maximum 30% on all criteria
+        - If mentions project tools but no AI: Maximum 50% on all criteria
         - If mentions AI tools like Copilot/Power Automate: Can score 70-85%
         - If mentions full automation + AI + dashboards: Can score 85-100%
-        - Random or meaningless responses: Maximum 20% on all criteria
+        - Random or very short responses: Maximum 10% on all criteria
+        
+        CRITICAL: Check response length and meaningfulness:
+        - Responses under 10 characters or single words: Maximum 5%
+        - Responses like "okay", "yes", "good", "fine": Maximum 5%
+        - Responses under 50 characters with no substance: Maximum 15%
         
         EVALUATION CRITERIA (score each out of 100):
         1. Organization: How well-structured and logical is the approach to task/project management?

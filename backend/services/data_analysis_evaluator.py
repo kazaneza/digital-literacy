@@ -85,12 +85,18 @@ E015 | Esperance | Mukandayisenga | HR | Specialist | 48000 | 5 | E004 | PROJ_C 
         - Shows sophisticated understanding of AI-powered analytics and automation
         
         STRICT SCORING RULES:
-        - If NO AI tools mentioned: Maximum 40% on all criteria
-        - If only basic Excel mentioned: Maximum 45% on all criteria  
-        - If mentions "AI" but no specific tools: Maximum 55% on all criteria
+        - If meaningless/single word responses (like "okay", "yes", "good"): Maximum 5% on all criteria
+        - If NO AI tools mentioned: Maximum 25% on all criteria
+        - If only basic Excel mentioned: Maximum 35% on all criteria  
+        - If mentions "AI" but no specific tools: Maximum 45% on all criteria
         - If mentions specific AI tools (Copilot, Power BI AI): Can score 60-75%
         - If mentions automation + AI insights + anomaly detection: Can score 76-100%
-        - Random or meaningless responses: Maximum 20% on all criteria
+        - Random or very short responses: Maximum 10% on all criteria
+        
+        CRITICAL: Check response length and meaningfulness:
+        - Responses under 10 characters or single words: Maximum 5%
+        - Responses like "okay", "yes", "good", "fine": Maximum 5%
+        - Responses under 50 characters with no substance: Maximum 15%
         
         EVALUATION CRITERIA (score each out of 100):
         1. Data Understanding: How well does the user understand the dataset and business context?
