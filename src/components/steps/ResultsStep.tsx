@@ -59,6 +59,8 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
 
+    const automationReadiness = getAutomationReadiness();
+
     const reportContent = `
       <!DOCTYPE html>
       <html>
@@ -429,84 +431,6 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
               <p><strong>© 2025 Bank of Kigali Digital Literacy Program</strong></p>
               <p>This assessment is designed to evaluate and improve AI literacy skills across the organization</p>
             </div>
-          </div>
-        </body>
-      </html>
-    `;
-
-    printWindow.document.write(reportContent);
-    printWindow.document.close();
-    
-    // Auto-trigger print dialog
-    printWindow.onload = () => {
-      printWindow.print();
-    };
-  };
-
-  const automationReadiness = getAutomationReadiness();
-                </div>
-                <p><strong>Feedback:</strong> ${results.taskManagement.feedback}</p>
-              </div>
-            ` : ''}
-            
-            ${results.dataAnalysis ? `
-              <div class="assessment">
-                <div class="assessment-title">4. Data Analysis & Visualization - ${results.dataAnalysis.score}%</div>
-                <div class="criteria">
-                  ${Object.entries(results.dataAnalysis.criteria).map(([criterion, score]) => 
-                    `<div class="criteria-item"><span>${criterion.replace('_', ' ')}:</span><span>${score}%</span></div>`
-                  ).join('')}
-                </div>
-                <p><strong>Recommended Tools:</strong> ${results.dataAnalysis.recommended_tools.slice(0, 3).join(', ')}</p>
-                <p><strong>Feedback:</strong> ${results.dataAnalysis.feedback}</p>
-              </div>
-            ` : ''}
-            
-            ${results.productivity ? `
-              <div class="assessment">
-                <div class="assessment-title">5. AI Automation Interest - ${results.productivity.score}%</div>
-                <p><strong>Assessment:</strong> Interest and readiness for AI automation tools</p>
-                <p><strong>Automation Readiness:</strong> ${automationReadiness.level}</p>
-                <p><strong>Feedback:</strong> ${results.productivity.feedback}</p>
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="recommendations">
-            <h2>Development Recommendations</h2>
-            <h3>Immediate Actions</h3>
-            ${overallScore >= 75 ? `
-              <ul>
-                <li>Lead AI adoption initiatives within your team</li>
-                <li>Explore advanced AI applications in your field</li>
-                <li>Consider mentoring others in AI tool usage</li>
-              </ul>
-            ` : overallScore >= 50 ? `
-              <ul>
-                <li>Practice more complex AI prompting techniques</li>
-                <li>Experiment with different AI tools for various tasks</li>
-                <li>Focus on improving weaker assessment areas</li>
-              </ul>
-            ` : `
-              <ul>
-                <li>Take additional training on AI fundamentals</li>
-                <li>Practice basic prompting techniques regularly</li>
-                <li>Start with simple AI tools and gradually advance</li>
-              </ul>
-            `}
-            
-            <h3>Long-term Development</h3>
-            <ul>
-              <li>Stay updated with latest AI developments</li>
-              <li>Participate in Bank of Kigali's AI training programs</li>
-              <li>Build a portfolio of AI-enhanced work examples</li>
-              <li>Network with other AI practitioners in the organization</li>
-            </ul>
-          </div>
-
-          <div class="footer">
-            <p>© 2025 Bank of Kigali Digital Literacy Program</p>
-            <p>This assessment is designed to evaluate and improve AI literacy skills across the organization</p>
           </div>
         </body>
       </html>
