@@ -54,6 +54,163 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     return { level: 'Not Assessed', color: 'text-gray-600 bg-gray-100' };
   };
 
+  const handleDownloadReport = () => {
+    // Create a printable version by opening a new window with print styles
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const reportContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>AI Literacy Assessment Report - Bank of Kigali</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+            .header { text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; }
+            .logo { font-size: 24px; font-weight: bold; color: #1e40af; margin-bottom: 10px; }
+            .subtitle { color: #6b7280; font-size: 14px; }
+            .summary { background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+            .score-card { display: inline-block; text-align: center; margin: 10px; padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px; }
+            .assessment { margin-bottom: 25px; padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px; }
+            .assessment-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1f2937; }
+            .criteria { margin: 10px 0; }
+            .criteria-item { display: flex; justify-content: space-between; margin: 5px 0; }
+            .recommendations { background: #eff6ff; padding: 20px; border-radius: 8px; margin-top: 30px; }
+            .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px; }
+            @media print { body { margin: 0; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="logo">🏦 Bank of Kigali</div>
+            <div class="subtitle">Digital Literacy Program</div>
+            <h1>AI Literacy Assessment Report</h1>
+            <p>Assessment completed on ${getCurrentDate()}</p>
+          </div>
+
+          <div class="summary">
+            <h2>Executive Summary</h2>
+            <div class="score-card">
+              <h3>${levelInfo.level}</h3>
+              <div style="font-size: 24px; font-weight: bold; color: #2563eb;">${overallScore}%</div>
+              <div>Overall AI Literacy Score</div>
+            </div>
+            <div class="score-card">
+              <h3>${automationReadiness.level}</h3>
+              <div>Automation Interest</div>
+            </div>
+            <div class="score-card">
+              <h3>${Object.keys(results).length}</h3>
+              <div>Assessments Completed</div>
+            </div>
+          </div>
+
+          <div>
+            <h2>Detailed Assessment Results</h2>
+            ${results.promptEngineering ? `
+              <div class="assessment">
+                <div class="assessment-title">1. Prompt Engineering - ${results.promptEngineering.score}%</div>
+                <div class="criteria">
+                  ${Object.entries(results.promptEngineering.criteria).map(([criterion, score]) => 
+                    `<div class="criteria-item"><span>${criterion}:</span><span>${score}%</span></div>`
+                  ).join('')}
+                </div>
+                <p><strong>Feedback:</strong> ${results.promptEngineering.feedback}</p>
+              </div>
+            ` : ''}
+            
+            ${results.writingAssessment ? `
+              <div class="assessment">
+                <div class="assessment-title">2. AI Tool Usage Assessment - ${results.writingAssessment.score}%</div>
+                <p><strong>Assessment:</strong> Familiarity and usage of AI productivity tools</p>
+                <p><strong>Feedback:</strong> ${results.writingAssessment.feedback}</p>
+              </div>
+            ` : ''}
+            
+            ${results.taskManagement ? `
+              <div class="assessment">
+                <div class="assessment-title">3. Task Management & Workflow - ${results.taskManagement.score}%</div>
+                <div class="criteria">
+                  ${Object.entries(results.taskManagement.criteria).map(([criterion, score]) => 
+                    `<div class="criteria-item"><span>${criterion.replace('_', ' ')}:</span><span>${score}%</span></div>`
+                  ).join('')}
+                </div>
+                <p><strong>Feedback:</strong> ${results.taskManagement.feedback}</p>
+              </div>
+            ` : ''}
+            
+            ${results.dataAnalysis ? `
+              <div class="assessment">
+                <div class="assessment-title">4. Data Analysis & Visualization - ${results.dataAnalysis.score}%</div>
+                <div class="criteria">
+                  ${Object.entries(results.dataAnalysis.criteria).map(([criterion, score]) => 
+                    `<div class="criteria-item"><span>${criterion.replace('_', ' ')}:</span><span>${score}%</span></div>`
+                  ).join('')}
+                </div>
+                <p><strong>Recommended Tools:</strong> ${results.dataAnalysis.recommended_tools.slice(0, 3).join(', ')}</p>
+                <p><strong>Feedback:</strong> ${results.dataAnalysis.feedback}</p>
+              </div>
+            ` : ''}
+            
+            ${results.productivity ? `
+              <div class="assessment">
+                <div class="assessment-title">5. AI Automation Interest - ${results.productivity.score}%</div>
+                <p><strong>Assessment:</strong> Interest and readiness for AI automation tools</p>
+                <p><strong>Automation Readiness:</strong> ${automationReadiness.level}</p>
+                <p><strong>Feedback:</strong> ${results.productivity.feedback}</p>
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="recommendations">
+            <h2>Development Recommendations</h2>
+            <h3>Immediate Actions</h3>
+            ${overallScore >= 75 ? `
+              <ul>
+                <li>Lead AI adoption initiatives within your team</li>
+                <li>Explore advanced AI applications in your field</li>
+                <li>Consider mentoring others in AI tool usage</li>
+              </ul>
+            ` : overallScore >= 50 ? `
+              <ul>
+                <li>Practice more complex AI prompting techniques</li>
+                <li>Experiment with different AI tools for various tasks</li>
+                <li>Focus on improving weaker assessment areas</li>
+              </ul>
+            ` : `
+              <ul>
+                <li>Take additional training on AI fundamentals</li>
+                <li>Practice basic prompting techniques regularly</li>
+                <li>Start with simple AI tools and gradually advance</li>
+              </ul>
+            `}
+            
+            <h3>Long-term Development</h3>
+            <ul>
+              <li>Stay updated with latest AI developments</li>
+              <li>Participate in Bank of Kigali's AI training programs</li>
+              <li>Build a portfolio of AI-enhanced work examples</li>
+              <li>Network with other AI practitioners in the organization</li>
+            </ul>
+          </div>
+
+          <div class="footer">
+            <p>© 2025 Bank of Kigali Digital Literacy Program</p>
+            <p>This assessment is designed to evaluate and improve AI literacy skills across the organization</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(reportContent);
+    printWindow.document.close();
+    
+    // Auto-trigger print dialog
+    printWindow.onload = () => {
+      printWindow.print();
+    };
+  };
+
   const automationReadiness = getAutomationReadiness();
 
   return (
@@ -406,7 +563,10 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
       {/* Footer */}
       <div className="text-center border-t border-gray-200 pt-6">
         <div className="flex justify-center space-x-4 mb-4">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button 
+            onClick={handleDownloadReport}
+            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
             <Download className="w-4 h-4" />
             <span>Download Report</span>
           </button>
