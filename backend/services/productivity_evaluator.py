@@ -136,6 +136,20 @@ Total time: 60 minutes per application × 500 applications = 500 hours monthly""
         4. Efficiency Improvement: Does the solution demonstrate significant productivity gains?
         5. Implementation Feasibility: How realistic and practical is the proposed implementation?
         
+        STRICT SCORING RULES:
+        - If meaningless/single word responses (like "okay", "yes", "good"): Maximum 5% on all criteria
+        - If NO AI tools mentioned: Maximum 25% on all criteria
+        - If only basic Excel mentioned: Maximum 35% on all criteria
+        - If mentions "AI" but no specific tools: Maximum 45% on all criteria
+        - If mentions specific AI tools (Copilot, Power Automate): Can score 60-75%
+        - If mentions automation + AI insights + specific implementation: Can score 76-100%
+        - Random or very short responses: Maximum 10% on all criteria
+        
+        CRITICAL: Check response length and meaningfulness:
+        - Responses under 10 characters or single words: Maximum 5%
+        - Responses like "okay", "yes", "good", "fine": Maximum 5%
+        - Responses under 50 characters with no substance: Maximum 15%
+        
         Please respond in this exact JSON format:
         {{
             "process_analysis": <score 0-100>,
