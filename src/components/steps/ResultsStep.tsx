@@ -1,6 +1,7 @@
 import React from 'react';
-import { Trophy, Award, Target, TrendingUp, Home } from 'lucide-react';
+import { Trophy, Award, Target, TrendingUp, Home, FileText, Download, Share2 } from 'lucide-react';
 import { AssessmentResults } from '../AssessmentFlow';
+import BKLogo from '../BKLogo';
 
 interface ResultsStepProps {
   results: AssessmentResults;
@@ -14,7 +15,6 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
     if (results.writingAssessment?.score) scores.push(results.writingAssessment.score);
     if (results.taskManagement?.score) scores.push(results.taskManagement.score);
     if (results.dataAnalysis?.score) scores.push(results.dataAnalysis.score);
-    if (results.presentations?.score) scores.push(results.presentations.score);
     if (results.productivity?.score) scores.push(results.productivity.score);
     
     if (scores.length === 0) return 0;
@@ -22,9 +22,9 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
   };
 
   const getOverallLevel = (score: number) => {
-    if (score >= 85) return { level: 'Innovator', color: 'text-purple-600 bg-purple-100', icon: Trophy };
-    if (score >= 70) return { level: 'Practitioner', color: 'text-blue-600 bg-blue-100', icon: Award };
-    return { level: 'Explorer', color: 'text-green-600 bg-green-100', icon: Target };
+    if (score >= 75) return { level: 'Innovator', color: 'text-purple-600 bg-purple-100', icon: Trophy, description: 'Advanced AI user ready to lead digital transformation' };
+    if (score >= 50) return { level: 'Practitioner', color: 'text-blue-600 bg-blue-100', icon: Award, description: 'Competent AI user with solid foundational skills' };
+    return { level: 'Explorer', color: 'text-green-600 bg-green-100', icon: Target, description: 'Beginning AI journey with curiosity and basic understanding' };
   };
 
   const overallScore = calculateOverallScore();
@@ -32,457 +32,402 @@ const ResultsStep: React.FC<ResultsStepProps> = ({ results, onBackToLanding }) =
   const LevelIcon = levelInfo.icon;
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600 bg-green-100';
-    if (score >= 60) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (score >= 75) return 'text-green-600 bg-green-100';
+    if (score >= 50) return 'text-blue-600 bg-blue-100';
+    return 'text-orange-600 bg-orange-100';
   };
+
+  const getCurrentDate = () => {
+    return new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getAutomationReadiness = () => {
+    if (results.productivity?.score) {
+      if (results.productivity.score >= 75) return { level: 'High', color: 'text-green-600 bg-green-100' };
+      if (results.productivity.score >= 50) return { level: 'Medium', color: 'text-blue-600 bg-blue-100' };
+      return { level: 'Low', color: 'text-orange-600 bg-orange-100' };
+    }
+    return { level: 'Not Assessed', color: 'text-gray-600 bg-gray-100' };
+  };
+
+  const automationReadiness = getAutomationReadiness();
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <div className="flex items-center justify-center space-x-3 mb-4">
-          <TrendingUp className="w-8 h-8 text-blue-600" />
-          <h2 className="text-3xl font-bold text-gray-900">Assessment Results</h2>
+      {/* Header with Logo */}
+      <div className="text-center border-b border-gray-200 pb-8">
+        <div className="flex justify-center mb-6">
+          <BKLogo />
         </div>
-        <p className="text-lg text-gray-600">
-          Congratulations on completing the AI Literacy Assessment!
+        <div className="flex items-center justify-center space-x-3 mb-4">
+          <FileText className="w-8 h-8 text-blue-600" />
+          <h1 className="text-4xl font-bold text-gray-900">AI Literacy Assessment Report</h1>
+        </div>
+        <p className="text-lg text-gray-600 mb-2">
+          Comprehensive evaluation of AI skills and automation readiness
+        </p>
+        <p className="text-sm text-gray-500">
+          Assessment completed on {getCurrentDate()}
         </p>
       </div>
 
-      {/* Overall Score */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-8 text-center">
-        <div className={`inline-flex items-center space-x-3 px-6 py-3 rounded-full ${levelInfo.color} mb-4`}>
-          <LevelIcon className="w-6 h-6" />
-          <span className="text-xl font-bold">{levelInfo.level}</span>
+      {/* Executive Summary */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center space-x-3">
+          <TrendingUp className="w-6 h-6 text-blue-600" />
+          <span>Executive Summary</span>
+        </h2>
+        
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Overall AI Literacy Level */}
+          <div className="bg-white rounded-lg p-6 text-center">
+            <div className={`inline-flex items-center space-x-3 px-4 py-2 rounded-full ${levelInfo.color} mb-4`}>
+              <LevelIcon className="w-5 h-5" />
+              <span className="font-bold">{levelInfo.level}</span>
+            </div>
+            <div className="text-3xl font-bold text-gray-800 mb-2">{overallScore}%</div>
+            <div className="text-sm text-gray-600">Overall AI Literacy Score</div>
+            <p className="text-xs text-gray-500 mt-2">{levelInfo.description}</p>
+          </div>
+
+          {/* Automation Readiness */}
+          <div className="bg-white rounded-lg p-6 text-center">
+            <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full ${automationReadiness.color} mb-4`}>
+              <span className="font-bold">{automationReadiness.level}</span>
+            </div>
+            <div className="text-lg font-semibold text-gray-800 mb-2">Automation Interest</div>
+            <div className="text-sm text-gray-600">Readiness for AI Tools</div>
+            <p className="text-xs text-gray-500 mt-2">
+              {automationReadiness.level === 'High' ? 'Eager to adopt AI automation' :
+               automationReadiness.level === 'Medium' ? 'Selective about AI adoption' :
+               automationReadiness.level === 'Low' ? 'Prefers traditional methods' :
+               'Assessment not completed'}
+            </p>
+          </div>
+
+          {/* Assessments Completed */}
+          <div className="bg-white rounded-lg p-6 text-center">
+            <div className="text-3xl font-bold text-blue-600 mb-2">
+              {Object.keys(results).length}
+            </div>
+            <div className="text-lg font-semibold text-gray-800 mb-2">Assessments</div>
+            <div className="text-sm text-gray-600">Completed</div>
+            <p className="text-xs text-gray-500 mt-2">Out of 5 total assessments</p>
+          </div>
         </div>
-        <div className="text-4xl font-bold text-gray-800 mb-2">{overallScore}%</div>
-        <div className="text-lg text-gray-600">Overall AI Literacy Score</div>
       </div>
 
-      {/* Individual Results */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Prompt Engineering Results */}
-        {results.promptEngineering && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 font-bold">1</span>
-              </div>
-              <span>Prompt Engineering</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
+      {/* Detailed Assessment Results */}
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Detailed Assessment Results</h2>
+        <div className="grid lg:grid-cols-2 gap-6">
+          
+          {/* Prompt Engineering */}
+          {results.promptEngineering && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <span className="text-blue-600 font-bold text-sm">1</span>
+                  </div>
+                  <span>Prompt Engineering</span>
+                </h3>
                 <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.promptEngineering.score)}`}>
                   {results.promptEngineering.score}%
                 </span>
               </div>
               
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.promptEngineering.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.promptEngineering.feedback}
-                </p>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  <strong>Assessment:</strong> AI prompting skills and instruction clarity
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Performance Breakdown:</span>
+                  {Object.entries(results.promptEngineering.criteria).map(([criterion, score]) => (
+                    <div key={criterion} className="flex justify-between items-center text-sm">
+                      <span className="text-gray-600 capitalize">{criterion}:</span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                        {score}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {results.promptEngineering.feedback}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Writing Assessment Results */}
-        {results.writingAssessment && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 font-bold">2</span>
-              </div>
-              <span>Writing & Document Automation</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Grade:</span>
-                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.writingAssessment.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.writingAssessment.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.writingAssessment.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
-                  'text-red-600 bg-red-100 border-red-300'
-                }`}>
-                  {results.writingAssessment.grade}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
+          {/* Writing Assessment */}
+          {results.writingAssessment && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <span className="text-purple-600 font-bold text-sm">2</span>
+                  </div>
+                  <span>AI Tool Usage Assessment</span>
+                </h3>
                 <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.writingAssessment.score)}`}>
                   {results.writingAssessment.score}%
                 </span>
               </div>
               
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.writingAssessment.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  <strong>Assessment:</strong> Familiarity and usage of AI productivity tools
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Tool Proficiency:</span>
+                  <div className="text-sm text-gray-600">
+                    Evaluated across Microsoft Office AI features, Canva, ChatGPT, and other productivity tools
                   </div>
-                ))}
-              </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.writingAssessment.feedback}
-                </p>
+                </div>
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {results.writingAssessment.feedback}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Task Management Results */}
-        {results.taskManagement && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                <span className="text-orange-600 font-bold">3</span>
-              </div>
-              <span>Task Management & Workflow</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Grade:</span>
-                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.taskManagement.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.taskManagement.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.taskManagement.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
-                  'text-red-600 bg-red-100 border-red-300'
-                }`}>
-                  {results.taskManagement.grade}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Efficiency:</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  results.taskManagement.efficiency_rating === 'Excellent' ? 'text-green-600 bg-green-100' :
-                  results.taskManagement.efficiency_rating === 'Good' ? 'text-blue-600 bg-blue-100' :
-                  results.taskManagement.efficiency_rating === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
-                  'text-red-600 bg-red-100'
-                }`}>
-                  {results.taskManagement.efficiency_rating}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
+          {/* Task Management */}
+          {results.taskManagement && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <span className="text-orange-600 font-bold text-sm">3</span>
+                  </div>
+                  <span>Task Management & Workflow</span>
+                </h3>
                 <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.taskManagement.score)}`}>
                   {results.taskManagement.score}%
                 </span>
               </div>
               
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.taskManagement.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.taskManagement.feedback}
-                </p>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  <strong>Assessment:</strong> AI-enhanced project management and workflow optimization
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Performance Breakdown:</span>
+                  {Object.entries(results.taskManagement.criteria).map(([criterion, score]) => (
+                    <div key={criterion} className="flex justify-between items-center text-sm">
+                      <span className="text-gray-600 capitalize">{criterion.replace('_', ' ')}:</span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                        {score}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {results.taskManagement.feedback}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Data Analysis Results */}
-        {results.dataAnalysis && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <span className="text-indigo-600 font-bold">4</span>
-              </div>
-              <span>Data Analysis & Visualization</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Grade:</span>
-                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.dataAnalysis.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.dataAnalysis.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.dataAnalysis.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
-                  'text-red-600 bg-red-100 border-red-300'
-                }`}>
-                  {results.dataAnalysis.grade}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Insight Quality:</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  results.dataAnalysis.insight_quality === 'Excellent' ? 'text-green-600 bg-green-100' :
-                  results.dataAnalysis.insight_quality === 'Good' ? 'text-blue-600 bg-blue-100' :
-                  results.dataAnalysis.insight_quality === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
-                  'text-red-600 bg-red-100'
-                }`}>
-                  {results.dataAnalysis.insight_quality}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
+          {/* Data Analysis */}
+          {results.dataAnalysis && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <span className="text-indigo-600 font-bold text-sm">4</span>
+                  </div>
+                  <span>Data Analysis & Visualization</span>
+                </h3>
                 <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.dataAnalysis.score)}`}>
                   {results.dataAnalysis.score}%
                 </span>
               </div>
               
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.dataAnalysis.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Recommended Tools:</span>
-                <div className="flex flex-wrap gap-1">
-                  {results.dataAnalysis.recommended_tools.slice(0, 3).map((tool, index) => (
-                    <span key={index} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
-                      {tool}
-                    </span>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  <strong>Assessment:</strong> AI-powered data analysis and business intelligence
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Performance Breakdown:</span>
+                  {Object.entries(results.dataAnalysis.criteria).map(([criterion, score]) => (
+                    <div key={criterion} className="flex justify-between items-center text-sm">
+                      <span className="text-gray-600 capitalize">{criterion.replace('_', ' ')}:</span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
+                        {score}%
+                      </span>
+                    </div>
                   ))}
                 </div>
-              </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.dataAnalysis.feedback}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Presentation Results */}
-        {results.presentations && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
-                <span className="text-pink-600 font-bold">5</span>
-              </div>
-              <span>AI-Powered Presentations</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Grade:</span>
-                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.presentations.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.presentations.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.presentations.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
-                  'text-red-600 bg-red-100 border-red-300'
-                }`}>
-                  {results.presentations.grade}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Engagement:</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  results.presentations.engagement_level === 'Excellent' ? 'text-green-600 bg-green-100' :
-                  results.presentations.engagement_level === 'Good' ? 'text-blue-600 bg-blue-100' :
-                  results.presentations.engagement_level === 'Fair' ? 'text-yellow-600 bg-yellow-100' :
-                  'text-red-600 bg-red-100'
-                }`}>
-                  {results.presentations.engagement_level}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
-                <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.presentations.score)}`}>
-                  {results.presentations.score}%
-                </span>
-              </div>
-              
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.presentations.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Recommended Tools:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {results.dataAnalysis.recommended_tools.slice(0, 4).map((tool, index) => (
+                      <span key={index} className="px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs">
+                        {tool}
+                      </span>
+                    ))}
                   </div>
-                ))}
-              </div>
-              
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Recommended Tools:</span>
-                <div className="flex flex-wrap gap-1">
-                  {results.presentations.recommended_tools.slice(0, 3).map((tool, index) => (
-                    <span key={index} className="px-2 py-1 bg-pink-100 text-pink-700 rounded text-xs">
-                      {tool}
-                    </span>
-                  ))}
+                </div>
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {results.dataAnalysis.feedback}
+                  </p>
                 </div>
               </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.presentations.feedback}
-                </p>
-              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Productivity Results */}
-        {results.productivity && (
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-              <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                <span className="text-yellow-600 font-bold">6</span>
-              </div>
-              <span>Workflow Automation</span>
-            </h3>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Grade:</span>
-                <span className={`px-3 py-1 rounded-lg border-2 font-bold ${
-                  results.productivity.grade === 'A' ? 'text-green-600 bg-green-100 border-green-300' :
-                  results.productivity.grade === 'B' ? 'text-blue-600 bg-blue-100 border-blue-300' :
-                  results.productivity.grade === 'C' ? 'text-yellow-600 bg-yellow-100 border-yellow-300' :
-                  'text-red-600 bg-red-100 border-red-300'
-                }`}>
-                  {results.productivity.grade}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Efficiency Gain:</span>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  results.productivity.efficiency_gain === 'High' ? 'text-green-600 bg-green-100' :
-                  results.productivity.efficiency_gain === 'Medium' ? 'text-blue-600 bg-blue-100' :
-                  results.productivity.efficiency_gain === 'Low' ? 'text-yellow-600 bg-yellow-100' :
-                  'text-red-600 bg-red-100'
-                }`}>
-                  {results.productivity.efficiency_gain}
-                </span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Score:</span>
+          {/* Productivity/Automation Interest */}
+          {results.productivity && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-800 flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <span className="text-yellow-600 font-bold text-sm">5</span>
+                  </div>
+                  <span>AI Automation Interest</span>
+                </h3>
                 <span className={`px-3 py-1 rounded-full font-semibold ${getScoreColor(results.productivity.score)}`}>
                   {results.productivity.score}%
                 </span>
               </div>
               
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Timeline:</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
-                  {results.productivity.implementation_timeline}
-                </span>
-              </div>
-              
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Criteria Breakdown:</span>
-                {Object.entries(results.productivity.criteria).map(([criterion, score]) => (
-                  <div key={criterion} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 capitalize">{criterion.replace('_', ' ')}:</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getScoreColor(score as number)}`}>
-                      {score}%
-                    </span>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-600">
+                  <strong>Assessment:</strong> Interest and readiness for AI automation tools
+                </div>
+                <div className="space-y-2">
+                  <span className="text-sm font-medium text-gray-700">Automation Preferences:</span>
+                  <div className="text-sm text-gray-600">
+                    Survey responses indicate {automationReadiness.level.toLowerCase()} interest in AI-powered workflow automation
                   </div>
-                ))}
-              </div>
-              
-              <div className="space-y-2">
-                <span className="text-gray-600 font-medium">Recommended Tools:</span>
-                <div className="flex flex-wrap gap-1">
-                  {results.productivity.recommended_tools.slice(0, 3).map((tool, index) => (
-                    <span key={index} className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">
-                      {tool}
-                    </span>
-                  ))}
+                </div>
+                <div className="pt-3 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {results.productivity.feedback}
+                  </p>
                 </div>
               </div>
-              
-              <div className="pt-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {results.productivity.feedback}
-                </p>
-              </div>
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Recommendations */}
-      <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Next Steps & Recommendations</h3>
-        <div className="space-y-3">
-          {overallScore >= 85 ? (
-            <>
-              <p className="text-gray-700">🎉 Excellent work! You demonstrate advanced AI literacy skills.</p>
-              <p className="text-gray-700">• Consider mentoring others in AI tool usage</p>
-              <p className="text-gray-700">• Explore advanced AI applications in your field</p>
-              <p className="text-gray-700">• Stay updated with the latest AI developments</p>
-            </>
-          ) : overallScore >= 70 ? (
-            <>
-              <p className="text-gray-700">👍 Good progress! You have solid foundational AI skills.</p>
-              <p className="text-gray-700">• Practice more complex prompting techniques</p>
-              <p className="text-gray-700">• Experiment with different AI tools for various tasks</p>
-              <p className="text-gray-700">• Focus on improving weaker areas identified in the assessment</p>
-            </>
-          ) : (
-            <>
-              <p className="text-gray-700">🌱 Great start! Continue building your AI literacy foundation.</p>
-              <p className="text-gray-700">• Take additional training on AI fundamentals</p>
-              <p className="text-gray-700">• Practice basic prompting techniques regularly</p>
-              <p className="text-gray-700">• Start with simple AI tools and gradually advance</p>
-            </>
           )}
         </div>
       </div>
 
-      {/* Action Button */}
-      <div className="text-center">
+      {/* Recommendations */}
+      <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Development Recommendations</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Immediate Actions</h3>
+            <div className="space-y-2">
+              {overallScore >= 75 ? (
+                <>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-green-600 mt-1">•</span>
+                    <span>Lead AI adoption initiatives within your team</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-green-600 mt-1">•</span>
+                    <span>Explore advanced AI applications in your field</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-green-600 mt-1">•</span>
+                    <span>Consider mentoring others in AI tool usage</span>
+                  </p>
+                </>
+              ) : overallScore >= 50 ? (
+                <>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Practice more complex AI prompting techniques</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Experiment with different AI tools for various tasks</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-blue-600 mt-1">•</span>
+                    <span>Focus on improving weaker assessment areas</span>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-orange-600 mt-1">•</span>
+                    <span>Take additional training on AI fundamentals</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-orange-600 mt-1">•</span>
+                    <span>Practice basic prompting techniques regularly</span>
+                  </p>
+                  <p className="text-gray-700 flex items-start space-x-2">
+                    <span className="text-orange-600 mt-1">•</span>
+                    <span>Start with simple AI tools and gradually advance</span>
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Long-term Development</h3>
+            <div className="space-y-2">
+              <p className="text-gray-700 flex items-start space-x-2">
+                <span className="text-blue-600 mt-1">•</span>
+                <span>Stay updated with latest AI developments</span>
+              </p>
+              <p className="text-gray-700 flex items-start space-x-2">
+                <span className="text-blue-600 mt-1">•</span>
+                <span>Participate in Bank of Kigali's AI training programs</span>
+              </p>
+              <p className="text-gray-700 flex items-start space-x-2">
+                <span className="text-blue-600 mt-1">•</span>
+                <span>Build a portfolio of AI-enhanced work examples</span>
+              </p>
+              <p className="text-gray-700 flex items-start space-x-2">
+                <span className="text-blue-600 mt-1">•</span>
+                <span>Network with other AI practitioners in the organization</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="text-center border-t border-gray-200 pt-6">
+        <div className="flex justify-center space-x-4 mb-4">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Download className="w-4 h-4" />
+            <span>Download Report</span>
+          </button>
+          <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            <Share2 className="w-4 h-4" />
+            <span>Share Results</span>
+          </button>
+        </div>
+        
         <button
           onClick={onBackToLanding}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold flex items-center space-x-3 mx-auto transition-colors"
+          className="flex items-center space-x-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-semibold mx-auto transition-colors"
         >
           <Home className="w-5 h-5" />
           <span>Return to Home</span>
         </button>
+        
+        <div className="mt-6 text-sm text-gray-500">
+          <p>© 2025 Bank of Kigali Digital Literacy Program</p>
+          <p>This assessment is designed to evaluate and improve AI literacy skills across the organization</p>
+        </div>
       </div>
     </div>
   );
