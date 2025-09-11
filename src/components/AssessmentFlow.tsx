@@ -78,7 +78,7 @@ const AssessmentFlow: React.FC<AssessmentFlowProps> = ({ onBackToLanding }) => {
     { id: 2, title: 'Writing & Document Automation', description: 'Create professional documents with AI' },
     { id: 3, title: 'Task Management & Workflow', description: 'Optimize processes with AI tools' },
     { id: 4, title: 'Data Analysis & Visualization', description: 'AI-powered data insights and visualization' },
-    { id: 5, title: 'Workflow Automation', description: 'Automate processes and boost productivity' },
+    { id: 5, title: 'AI Automation Interest', description: 'Survey your interest in AI and automation' },
     { id: 6, title: 'Results', description: 'View your assessment results' }
   ];
 
