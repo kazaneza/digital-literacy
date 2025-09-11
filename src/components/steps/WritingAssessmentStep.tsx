@@ -266,8 +266,8 @@ const WritingAssessmentStep: React.FC<WritingAssessmentStepProps> = ({ onComplet
                     <span>Manual</span>
                     <span>Automated</span>
                   </div>
-                </div>
-              </div>
+            <div className={`px-4 py-2 rounded-lg font-bold ${getCriteriaColor(evaluation.score)}`}>
+              {evaluation.score}%
             </div>
           );
         })}

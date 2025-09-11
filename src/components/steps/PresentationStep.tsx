@@ -272,14 +272,8 @@ const PresentationStep: React.FC<PresentationStepProps> = ({ onComplete, isCompl
                 Presentation Evaluation Results
               </h3>
             </div>
-            <div className="flex items-center space-x-3">
-              <div className={`px-4 py-2 rounded-lg border-2 font-bold text-xl ${getGradeColor(evaluation.grade)}`}>
-                Grade: {evaluation.grade}
-              </div>
-              <div className={`px-3 py-1 rounded-full font-medium flex items-center space-x-1 ${getEngagementColor(evaluation.engagement_level)}`}>
-                <Sparkles className="w-4 h-4" />
-                <span>{evaluation.engagement_level}</span>
-              </div>
+            <div className={`px-4 py-2 rounded-lg font-bold ${getCriteriaColor(evaluation.score)}`}>
+              {evaluation.score}%
             </div>
           </div>
 

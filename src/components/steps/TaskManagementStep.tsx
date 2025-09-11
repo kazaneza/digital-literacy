@@ -200,21 +200,8 @@ const TaskManagementStep: React.FC<TaskManagementStepProps> = ({ onComplete, isC
                 Task Management Evaluation Results
               </h3>
             </div>
-            <div className="flex items-center space-x-3">
-              <div className={`px-4 py-2 rounded-lg border-2 font-bold text-xl ${getGradeColor(evaluation.grade)}`}>
-                Grade: {evaluation.grade}
-              </div>
-              <div className={`px-3 py-1 rounded-full font-medium flex items-center space-x-1 ${
-                evaluation.score >= 76 ? 'text-purple-600 bg-purple-100' :
-                evaluation.score >= 51 ? 'text-blue-600 bg-blue-100' :
-                'text-green-600 bg-green-100'
-              }`}>
-                <span>{evaluation.score >= 76 ? 'Innovator' : evaluation.score >= 51 ? 'Practitioner' : 'Explorer'}</span>
-              </div>
-              <div className={`px-3 py-1 rounded-full font-medium flex items-center space-x-1 ${getEfficiencyColor(evaluation.efficiency_rating)}`}>
-                <Clock className="w-4 h-4" />
-                <span>{evaluation.efficiency_rating}</span>
-              </div>
+            <div className={`px-4 py-2 rounded-lg font-bold ${getCriteriaColor(evaluation.score)}`}>
+              {evaluation.score}%
             </div>
           </div>
 

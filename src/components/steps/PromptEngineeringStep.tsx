@@ -226,7 +226,7 @@ const PromptEngineeringStep: React.FC<PromptEngineeringStepProps> = ({ onComplet
             <h3 className="text-xl font-semibold text-gray-800">
               Prompt Evaluation Results
             </h3>
-            <span className={`px-4 py-2 rounded-full font-semibold ${getCriteriaColor(evaluation.score)}`}>
+            <div className={`px-4 py-2 rounded-full font-bold ${getCriteriaColor(evaluation.score)}`}>
               {evaluation.score}%
             </span>
           </div>
